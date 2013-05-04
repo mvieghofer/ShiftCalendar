@@ -1,0 +1,1 @@
+ShiftCalendar is a application that can be used to insert shift entries into the google calendar.
