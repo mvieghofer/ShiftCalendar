@@ -1,0 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Merriweather+Sans);
+
+#nav {
+	width: 15%;
+	padding-top: 5%;
+	padding-left: 10%;
+}
+
+#sub-nav-cont > h2 {
+	border-bottom: #000 solid 1px;
+	color: #808080;
+	font-family: 'Merriweather Sans', sans-serif;
+	font-size: 1.1em;
+}

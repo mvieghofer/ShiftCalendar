@@ -1,0 +1,17 @@
+{
+  // Required
+  "name": "ShiftCalendar",
+  "version": "0.1",
+  "manifest_version": 2,
+
+  // Recommended
+  "description": "A plain text description",
+  //"icons": { ... },
+
+  // Pick one (or none)
+  "app": {
+      "launch": {
+        "local_path": "main.html"
+      }
+  }
+}
