@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Merriweather+Sans);
 
+body {
+	font-family: 'Merriweather Sans', sans-serif;
+}
+
 #nav {
 	width: 15%;
 	padding-top: 5%;
@@ -9,6 +13,32 @@
 #sub-nav-cont > h2 {
 	border-bottom: #000 solid 1px;
 	color: #808080;
-	font-family: 'Merriweather Sans', sans-serif;
 	font-size: 1.1em;
+}
+
+#login-cont {
+	font-size: 0.8em;
+	color: #000;
+	padding-bottom: 15%;
+}
+
+#login-cont a {
+	color: #000;
+}
+
+#sub-nav-cont ul {
+	list-style-type: none;
+	padding-left: 0px;
+}
+
+.sub-nav-entry {
+	cursor: pointer;
+}
+
+.sub-nav-entry:hover {
+	background: #ABABAB;
+}
+
+.sub-nav-entry-active {
+	background: #ff0000;
 }
