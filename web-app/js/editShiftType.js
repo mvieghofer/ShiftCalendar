@@ -57,12 +57,21 @@ function editShiftType(event, shiftType) {
     $("#to-time").trigger("change");
 }
 
+function checkNameUniqunessResult(event, uniqueness) {
+    if (!uniqueness) {
+        $("#error").append("<li>Name not unique</li>");
+    } else {
+        $("#error").html($("#error").html().replace("<li>Name not unique</li>", ""));
+    }
+}
+
 $(document).ready(function() {
     var fromTime = {"hh": 0, "mm": 0},
         toTime = {"hh": 0, "mm": 0},
         duration = {"hh": 0, "mm": 0};
         
     $("body").on("editShiftType", editShiftType);
+    $("body").on("checkNameUniqunessResult", checkNameUniqunessResult);
     
     $("#from-time").change(function() {
         fromTime = parseTime($(this).val());
@@ -85,16 +94,20 @@ $(document).ready(function() {
         $("#duration").html((duration.hh < 10 ? "0" + duration.hh : duration.hh) + ":" + (duration.mm < 10 ? "0" + duration.mm : duration.mm));
     });    
     
+    $("#shift-type-name").change(function() {
+       $("body").trigger("checkNameUniquness", $(this).val()); 
+    });
+    
     $("#btn-add-shift-type-submit").click(function() {
             var errorText = "";
             if($("#shift-type-name").val() === "") {
-                errorText = "no name";
+                errorText = "<li>no name</li>";
             } 
             if ($("#from-time").val() === "") {
-                errorText += "<br />no start time";
+                errorText += "<li>no start time</li>";
             } 
             if ($("#to-time").val() === "") {
-                errorText += "<br />no end time";
+                errorText += "<li>no end time</li>";
             }
             if (errorText === "")
                 submitShiftType(type, fromTime, toTime);

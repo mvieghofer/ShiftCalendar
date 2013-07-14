@@ -2,7 +2,7 @@ var shiftTypeEntryTemplate = "<li class=\"sub-nav-entry\" id=\"{0}\"><div>{0}</d
 var shiftTypes = [ {"name": "ShiftType 1", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
                    {"name": "ShiftType 2", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
                    {"name": "ShiftType 3", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}} ]
-var mode = "";
+var mode = "calendar";
 
 function addShiftType(eventString, shiftType) {
 	$("#shift-types").append(shiftTypeEntryTemplate.replace(/\{0\}/g, shiftType.name));
@@ -63,6 +63,8 @@ $(document).ready(function() {
 		}
 		if (mode === "edit") {
             $("body").trigger("editShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));
+        } else if (mode === "calendar") {
+            $("body").trigger("changeShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));
         }
 	});
 	
@@ -100,5 +102,10 @@ $(document).ready(function() {
     	    $(".sub-nav-entry a").hide();
             $("#main-cont").load("templates/calendar.html");
         }
+	});
+	
+	$("#login").click(function() {
+	    chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+        }); 
 	});
 });

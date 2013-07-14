@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="css/fullcalendar.css" type="text/css" />
+    <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+    <script type="text/javascript" src="js/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="js/calendar.js"></script>
 </head>
 
 <body>
-    <h1>Calendar</h1> 
+    <h1>Select Dates</h1> 
+    <div id="calendar-cont">
+        <div id="calendar"></div>
+        <div id="overview">
+            <h3>Selected Shift Type</h3>
+            <div id="selected-shift-type-cont"></div>
+            <h3>Selected Dates</h3>
+            <ul id="selected-dates-cont"></ul>
+        </div>
+    </div>
 </body>
 
 </html>
