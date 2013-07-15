@@ -97,3 +97,9 @@ body {
 .cell {
 	display: table-cell;    
 }
+
+
+#submit-overview {
+    position: relative; 
+    z-index:99;
+}

@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="css/fullcalendar.css" type="text/css" />
     <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+    <script type="text/javascript" src="js/moment.min.js"></script>
     <script type="text/javascript" src="js/fullcalendar.min.js"></script>
     <script type="text/javascript" src="js/calendar.js"></script>
 </head>
@@ -12,10 +13,15 @@
     <div id="calendar-cont">
         <div id="calendar"></div>
         <div id="overview">
-            <h3>Selected Shift Type</h3>
-            <div id="selected-shift-type-cont"></div>
-            <h3>Selected Dates</h3>
-            <ul id="selected-dates-cont"></ul>
+            <div id="overview-type">
+                <h3>Selected Shift Type</h3>
+                <div id="selected-shift-type-cont"></div>
+            </div>
+            <div id="overview-dates">
+                <h3>Selected Dates</h3>
+                <ul id="selected-dates-cont"></ul>
+            </div>
+            <a href="#" id="submit-overview">Submit</a>
         </div>
     </div>
 </body>

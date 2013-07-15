@@ -1,5 +1,8 @@
 var currentShiftType = null;
 var dates = [];
+var calendar = null;
+
+var addCalendarURLTemplate = "https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events?access_token={access_token}";
 
 function leadingZeroNumber(number) {
     return number < 10 ? "0" + number : number;
@@ -20,8 +23,7 @@ function changeShiftType(event, shiftType) {
 }
 
 function addDate(date) {
-    var tmp = new Date(date.getTime())
-    console.log(tmp);
+    var tmp = new Date(date.getTime());
     dates[dates.length] = tmp;
     $("#selected-dates-cont").append("<li>" + getDateString(tmp, "dd.mm.yyyy") + "</li>");
 }
@@ -40,7 +42,6 @@ function compareDates(date1, date2) {
 function dateSelected(date) {
     var dateIndex = -1;
     $.each(dates, function(index, value) {
-        console.log(dates[index] + " " + date);
         if (compareDates(dates[index], date)) {
             dateIndex = index;
         }
@@ -48,9 +49,63 @@ function dateSelected(date) {
     return dateIndex;
 }
 
+function changeCalendar(event, data) {
+    calendar = data;
+}
+
+function submitDates() {
+    if (validate()) {
+        var url = addCalendarURLTemplate.replace(/\{calendarId\}/g, calendar.id);
+        url = url.replace(/\{access_token\}/g, $.localStorage.get("access_token"));
+        console.log(url);
+        $.each(dates, function(index) {
+            var date = dates[index];
+            var fromDate = new Date(date.getTime());
+            fromDate.setHours(currentShiftType.from.hh);
+            fromDate.setMinutes(currentShiftType.from.mm);
+            var toDate = new Date(date.getTime());
+            toDate.setHours(currentShiftType.to.hh);
+            toDate.setMinutes(currentShiftType.to.mm);
+            
+            var data = { 
+                         "summary": currentShiftType.name,
+                         "end":   { "dateTime": toDate.toISOString() },
+                         "start": { "dateTime": fromDate.toISOString() }
+                       };
+           console.log(data);
+             gapi.client.load("calendar", "v3", function () {
+                var request = gapi.client.calendar.events.insert({"calendarId": calendar.id, "resource": data});
+                request.execute(function(response) {
+                    console.log(response);
+                })
+             });    
+        });
+    }
+}
+
+function validate() {
+    var errorText = "";
+    if (calendar == null) {
+        errorText += "Please select a calendar\n";
+    }
+    if (dates.length == 0) {
+        errorText += "No Dates selected\n";
+    }
+    if (currentShiftType == null) {
+        errorText += "No Shifttype selected\n";
+    }
+    if (errorText == "") {
+        return true;
+    } else {
+        alert(errorText);
+        return false;
+    }
+}
+
 $(document).ready(function() {   
     
     $("body").on("changeShiftType", changeShiftType);
+    $("body").on("changeCalendar", changeCalendar);
     
     var selectionManager = (function(){
 
@@ -84,6 +139,10 @@ $(document).ready(function() {
                 currDate.setDate(currDate.getDate() + 1);
             }
        }
+   });
+   
+   $("#submit-overview").click(function() {
+       submitDates();
    });
    
    $(window).trigger("resize");

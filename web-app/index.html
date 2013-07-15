@@ -3,14 +3,18 @@
 <head>
     <title>Shift Calendar</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script type="text/javascript" src="js/jquery-min-1.9.1.js"></script>
+    <link rel="shortcut icon" type="image/png" href="images/icon-16.png">
+    <script type="text/javascript" src="js/jquery-min-2.0.3.js"></script>
+    <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
 
 <body>
     <div id="nav">
         <div id="login-cont">
             <a href="#" id="login">Login</a>
+            <div id="user_info"></div>
         </div>
         <div class="sub-nav-cont">
             <div class="sub-nav-cont-header">
@@ -24,8 +28,8 @@
             <div class="sub-nav-cont-header">
                 <h2>Calendars</h2>
             </div>
-            <div id="calendars"></div>
-            <button id="btn-add-calendar">+</button>
+            <ul id="calendars"></ul>
+            <!-- ><button id="btn-add-calendar">+</button> -->
         </div>
     </div>
     <div id="main-cont">
