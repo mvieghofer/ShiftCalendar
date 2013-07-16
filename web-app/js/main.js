@@ -11,7 +11,7 @@ var mode = "calendar";
 
 var token = null;
 
-var apiKey = "AIzaSyBlqvZFDaLy3hXvtElkemMFlZK_NTtput0";
+var apiKey = "AIzaSyDkhEAe8uYrRm1H2jMfCsI0yvHdBDX1GRc";
 var clientId = "1078839201967-5q93saldmof06varcsmdmgmjmgq81m7m";
 var scopes = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/userinfo.profile"];
 
