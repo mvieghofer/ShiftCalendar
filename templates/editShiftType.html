@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/jquery.timepicker.css" />
+    <script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
+    <script type="text/javascript" src="js/editShiftType.js"></script>
+</head>
+
+<body>
+    <h1>Add Shift Type</h1>
+    <ul id="error">
+    </ul>
+    <div id="add-shift-type-form" class="table">
+        <div class="row">
+            <div class="cell"><label>Name</label></div>
+            <div class="cell"><input type="text" placeholder="Name" id="shift-type-name"/></div>
+        </div>
+        <div class="row">
+            <div class="cell"><label>From</label></div>
+            <div class="cell"><input type="text" placeholder="hh:mm" id="from-time" /></div>
+            <div class="cell"><label>To</label></div>
+            <div class="cell"><input type="text" placeholder="hh:mm" id="to-time"/></div>
+            <div class="cell"><label>Duration</label></div>
+            <div class="cell"><label id="duration"/></div>
+        </div>
+        <div class="row">
+            <div class="cell"><input type="submit" id="btn-add-shift-type-submit" value="Submit" /></div>
+        </div>
+    </div> 
+</body>
+
+</html>

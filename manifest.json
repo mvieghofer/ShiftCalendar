@@ -1,0 +1,36 @@
+{
+  "name": "ShiftCalendar",
+  "version": "0.2",
+  "manifest_version": 2,
+
+  "description": "A plain text description",
+  "icons": { "16": "images/icon-16.png", "128": "images/icon-128.png" },
+  
+  "permissions": [
+    "experimental",
+    "identity",
+    "https://www.googleapis.com/"
+  ],
+  
+  "oauth2": {
+      "client_id": "1078839201967.apps.googleusercontent.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile"
+      ]
+    },
+    
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDPYiFMAA8s+VLzmAJ8HT9jxfTpnPQaFJWr/PjlzC/3kzpT6EDvaRwMkCVMMTyha5v0lzuely4CwfGU6z0xqU2QKGHvJtAYdSF8ivJcHcK70pkpf1gI649GAyfQNmb9f80TMSUCUO1zNrZTkpwKG49EUETKIjlxL80yuhNiXniMiwIDAQAB",
+
+  "app": {
+      "background": {
+        "scripts": ["background.js"]
+      }
+  },
+  
+  "sandbox": {
+    "pages": ["templates/calendar.html"]
+  }
+}

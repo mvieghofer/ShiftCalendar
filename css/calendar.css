@@ -1,0 +1,24 @@
+#calendar-cont {
+}
+
+#calendar {
+    width: 75%;
+    display: inline-block;
+    float: left;
+}
+
+#overview {
+    width: 23%;
+    margin-left: 2%;
+    height: 50px;
+    display: inline-block;
+}
+
+#overview > div {
+    margin-bottom: 15px;
+}
+
+.selectedDay {
+    background: #ff0000;
+    margin: auto;
+}
