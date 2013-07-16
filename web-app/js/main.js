@@ -1,9 +1,9 @@
 var shiftTypeEntryTemplate = "<li class=\"sub-nav-entry\" id=\"{0}\"><div>{0}</div><a href=\"#\">-</a></li>";
-var calendarEntryTemplate = "<li class=\"sub-nav-entry\" id=\"{0}\"><div>{0}</div><a href=\"#\">-</a></li>";
+var calendarEntryTemplate = "<li class=\"sub-nav-entry\" id=\"{0}\"><div>{0}</div></li>";
 
-var shiftTypes = [ {"name": "ShiftType 1", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
-                   {"name": "ShiftType 2", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
-                   {"name": "ShiftType 3", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}} ];
+var shiftTypes = []// {"name": "ShiftType 1", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
+                   //{"name": "ShiftType 2", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}}, 
+                   //{"name": "ShiftType 3", "from": {"hh": 7, "mm": 0}, "to": {"hh": 19, "mm": 0}} ];
                    
 var calendars = [];
 
@@ -15,9 +15,18 @@ var apiKey = "AIzaSyBlqvZFDaLy3hXvtElkemMFlZK_NTtput0";
 var clientId = "1078839201967-5q93saldmof06varcsmdmgmjmgq81m7m";
 var scopes = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/userinfo.profile"];
 
+
+var SHIFT_TYPE_KEY = "shift-types";
+
+function saveShiftTypes() {
+    $.localStorage.set(SHIFT_TYPE_KEY, { "shiftTypes": shiftTypes });
+}
+
 function addShiftType(eventString, shiftType) {
 	$("#shift-types").append(shiftTypeEntryTemplate.replace(/\{0\}/g, shiftType.name));
 	shiftTypes.push(shiftType);
+	saveShiftTypes();
+	loadCalendarView();
 }
 
 function editShiftType(eventString, oldShiftName, newShiftType) {
@@ -29,6 +38,25 @@ function editShiftType(eventString, oldShiftName, newShiftType) {
     if(oldShiftName !== newShiftType.name) {
         $("#shift-types > .sub-nav-entry > div:contains('" + oldShiftName + "')").html(newShiftType.name);
     }
+    
+	saveShiftTypes();
+}
+
+function removeShiftType(currentAnchor) {
+    if (confirm("Are you sure you want to delete this category?")) {
+        var indexToDelete = -1;
+        $.each(shiftTypes, function (index, value) {
+            if (shiftTypes[index].name === $(currentAnchor.siblings()[0]).html()) {
+                indexToDelete = index;
+                $("#shift-types li").remove(":contains('" + shiftTypes[index].name + "')");
+            }
+        });
+        if (~indexToDelete) {
+            shiftTypes.splice(indexToDelete, 1);
+        }
+        saveShiftTypes();
+    }    
+    return false;
 }
 
 function checkNameUniqueness(eventString, name) {
@@ -41,11 +69,14 @@ function checkNameUniqueness(eventString, name) {
 }
 
 function setUp() {
+    if ($.localStorage.isSet(SHIFT_TYPE_KEY)) {
+        shiftTypes = $.localStorage.get(SHIFT_TYPE_KEY).shiftTypes;
+    }
 	$.each(shiftTypes, function(index, value) {
 		$("#shift-types").append(shiftTypeEntryTemplate.replace(/\{0\}/g, shiftTypes[index].name));
 	});
 	
-    $("#main-cont").load("templates/calendar.html", function () {});
+    loadCalendarView();
 	
 	$("body").on("addShiftType", addShiftType);
 	$("body").on("editShiftTypeComplete", editShiftType);
@@ -71,20 +102,6 @@ function getCalendar(name) {
     return calendar;
 }
 
-
-function onUserInfoFetched(e) {
-  if (this.status != 200) return;
-  var user_info = JSON.parse(this.response);
-  populateUserInfo(user_info);
-}
-
-function populateUserInfo(user_info) {
-    $("#login").hide();
-    var elem = $("#user_info");
-    if (!elem) return;
-    elem.html("<b>Hello " + user_info.name + "</b>");
-}
-
 function getCalendarList() {
     gapi.client.load("calendar", "v3", function () {
         var request = gapi.client.calendar.calendarList.list();
@@ -100,7 +117,6 @@ function getCalendarList() {
 }
 
 function handleClientLoad() {
-    // Step 2: Reference the API key
     gapi.client.setApiKey(apiKey);
     window.setTimeout(checkAuth,1);
 }
@@ -121,17 +137,13 @@ function handleAuthResult(authResult) {
 }
 
 function handleAuthClick(event) {
-    // Step 3: get authorization to use private data
     gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
     return false;
 }
-// Loadthe API and make an API call.  Display the results on the screen.
+
 function login() {
-    // Step 4: Load the Google+ API
     gapi.client.load('oauth2', 'v2', function() {
-        // Step 5: Assemble the API request
         var request = gapi.client.oauth2.userinfo.get();
-        // Step 6: Execute the API request
         request.execute(function(resp) {
             $("#login").hide();
             var elem = $("#user_info");
@@ -141,6 +153,14 @@ function login() {
             getCalendarList();
         });
     });
+}
+
+function loadCalendarView() {
+    $("#main-cont").load("templates/calendar.html");
+}
+
+function loadEditShiftTypeView() {
+	$("#main-cont").load("templates/editShiftType.html");
 }
 
 $(document).ready(function() {
@@ -153,6 +173,7 @@ $(document).ready(function() {
 		} else {
     		$(this).removeClass("sub-nav-entry-active");
 		}
+		
 		if ($(this).parent().attr("id") == "shift-types" && mode === "edit") {
             $("body").trigger("editShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));
         } else if ($(this).parent().attr("id") == "shift-types" && mode === "calendar") {
@@ -163,28 +184,17 @@ $(document).ready(function() {
 	});
 	
 	$("#btn-add-shift-type").click(function() {
-		$("#main-cont").load("templates/editShiftType.html");
+	    loadEditShiftTypeView();
 	});
 	
-	$("#btn-edit-shift-type").click(function() {
+	$("#btn-edit-shift-type").switchButton({checked: false, labels_placement: "right"});
+	
+	$("#edit-switch-wrapper").change(function() {
 	    if (mode !== "edit") {
 	        mode = "edit";
     	    $(".sub-nav-entry a").show();
     	    $(".sub-nav-entry a").click(function () {
-    	        var currentAnchor = $(this);
-    	        if (confirm("Are you sure you want to delete this category?")) {
-    	            var indexToDelete = -1;
-    	            $.each(shiftTypes, function (index, value) {
-    	                if (shiftTypes[index].name === $(currentAnchor.siblings()[0]).html()) {
-    	                    indexToDelete = index;
-                            $("#shift-types li").remove(":contains('" + shiftTypes[index].name + "')");
-	                    }
-    	            });
-    	            if (~indexToDelete) {
-    	                shiftTypes.splice(indexToDelete, 1);
-	                }
-    	        }    
-                return false;
+    	        removeShiftType($(this));
     	    });
             $("#main-cont").load("templates/editShiftType.html", function() {
                 if ($("#shift-types > .sub-nav-entry-active").length === 1) {
@@ -197,25 +207,4 @@ $(document).ready(function() {
             $("#main-cont").load("templates/calendar.html");
         }
 	});
-	
-	$("#login").click(function() {
-	    window.location = "https://accounts.google.com/o/oauth2/auth?" +
-	                "scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.readonly+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&" +
-	                "state=%2Fprofile&" +
-	                "response_type=token&" +
-	                "redirect_uri=http%3A%2F%2Flocalhost:8001%2Foauth2callback.html&" +
-                    "client_id=1078839201967-5q93saldmof06varcsmdmgmjmgq81m7m.apps.googleusercontent.com";
-	});
-	
-	/*if ($.localStorage.isSet("access_token")) {
-	    $.getJSON(
-            'https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=' + $.localStorage.get("access_token"),
-            function(data, textStatus, jqXHR) {
-                $("#login").hide();
-                $("#user_info").show();
-                $("#user_info").html("Hello, " + data.name);
-                getCalendarList();
-            }
-        );
-	}*/
 });

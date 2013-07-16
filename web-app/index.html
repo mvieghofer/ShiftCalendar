@@ -3,9 +3,12 @@
 <head>
     <title>Shift Calendar</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.switchButton.css">
     <link rel="shortcut icon" type="image/png" href="images/icon-16.png">
     <script type="text/javascript" src="js/jquery-min-2.0.3.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-button.min.js"></script>
     <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
+    <script type="text/javascript" src="js/jquery.switchButton.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
@@ -19,7 +22,12 @@
         <div class="sub-nav-cont">
             <div class="sub-nav-cont-header">
                 <h2>Shift Types</h2>
-                <a href="#" id="btn-edit-shift-type">Edit</a>
+                <div id="edit-wrapper">
+                    <span>Edit</span>
+                    <div id="edit-switch-wrapper">
+                        <input type="checkbox" href="#" id="btn-edit-shift-type" />
+                    </div>
+                </div>                
             </div>
             <ul id="shift-types"></ul>
             <button id="btn-add-shift-type">+</button>
@@ -29,7 +37,6 @@
                 <h2>Calendars</h2>
             </div>
             <ul id="calendars"></ul>
-            <!-- ><button id="btn-add-calendar">+</button> -->
         </div>
     </div>
     <div id="main-cont">

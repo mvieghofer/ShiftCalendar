@@ -8,11 +8,14 @@
 }
 
 #overview {
-    background: #00ff00;
     width: 23%;
     margin-left: 2%;
     height: 50px;
     display: inline-block;
+}
+
+#overview > div {
+    margin-bottom: 15px;
 }
 
 .selectedDay {

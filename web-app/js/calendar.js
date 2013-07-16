@@ -22,35 +22,46 @@ function changeShiftType(event, shiftType) {
     $("#selected-shift-type-cont").html("<div>" + shiftType.name + "</div>");
 }
 
+function addDatesToView() {
+    dates.sort(compareDates);
+    $("#selected-dates-cont").html("");
+    $.each(dates, function(index) {
+        $("#selected-dates-cont").append("<li>" + getDateString(dates[index], "dd.mm.yyyy") + "</li>");
+    });
+}
+
 function addDate(date) {
     var tmp = new Date(date.getTime());
     dates[dates.length] = tmp;
-    $("#selected-dates-cont").append("<li>" + getDateString(tmp, "dd.mm.yyyy") + "</li>");
+    addDatesToView();
 }
 
 function removeDate(date, dateIndex) {
-    dates.splice(dateIndex, 1);
-    $("#selected-dates-cont li").remove(":contains(" + getDateString(date, "dd.mm.yyyy") + ")");
+    dates.splice(dateIndex, 1);    
+    addDatesToView();
 }
 
 function compareDates(date1, date2) {
-    return (date1.getDate() === date2.getDate()) &&
-           (date1.getMonth() === date2.getMonth()) &&
-           (date1.getFullYear() === date2.getFullYear());
+    return (date1.getTime() - date2.getTime());
 }
 
 function dateSelected(date) {
     var dateIndex = -1;
     $.each(dates, function(index, value) {
-        if (compareDates(dates[index], date)) {
+        if (compareDates(dates[index], date) === 0) {
             dateIndex = index;
         }
     });
     return dateIndex;
 }
 
+function getCalendarSummary(calendar) {
+    return calendar.summaryOverride == undefined ? calendar.summary : calendar.summaryOverride;
+}
+
 function changeCalendar(event, data) {
     calendar = data;
+    $("#selected-calendar-cont").html(getCalendarSummary(calendar));
 }
 
 function submitDates() {
@@ -66,6 +77,9 @@ function submitDates() {
             var toDate = new Date(date.getTime());
             toDate.setHours(currentShiftType.to.hh);
             toDate.setMinutes(currentShiftType.to.mm);
+            if (toDate < fromDate) {
+                toDate.setDate(toDate.getDate() + 1);
+            }
             
             var data = { 
                          "summary": currentShiftType.name,
