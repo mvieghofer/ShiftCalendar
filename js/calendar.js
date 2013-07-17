@@ -10,10 +10,11 @@ function leadingZeroNumber(number) {
 
 function getDateString(date, format) {
     var dateString = "";
-    if (format === "dd.mm.yyyy")
+    if (format === "dd.mm.yyyy") {
         dateString = leadingZeroNumber(date.getDate()) + "." + leadingZeroNumber(date.getMonth() + 1) + "." + date.getFullYear();
-    else if (format === "yyyy-mm-dd")
+    } else if (format === "yyyy-mm-dd") {
         dateString = date.getFullYear() + "-" + leadingZeroNumber(date.getMonth() + 1) + "-" + leadingZeroNumber(date.getDate());
+    }
     return dateString;
 }
 
@@ -23,6 +24,7 @@ function changeShiftType(event, shiftType) {
 }
 
 function addDatesToView() {
+    $("#overview-dates-success").hide();
     dates.sort(compareDates);
     $("#selected-dates-cont").html("");
     $.each(dates, function(index) {
@@ -62,21 +64,86 @@ function getCalendarSummary(calendar) {
 function changeCalendar(event, data) {
     calendar = data;
     $("#selected-calendar-cont").html(getCalendarSummary(calendar));
+    getCalendarEvents();
+}
+
+function createEvent(data) {
+    var calEvent = {
+           "id": data.id,
+           "title": data.summary,
+           "start": new Date(data.start.dateTime),
+           "end": new Date(data.end.dateTime),
+           "editable": true
+       };
+   return calEvent;
+}
+
+function getCalendarEvents() {
+    $("#calendar").fullCalendar("removeEvents");
+    var calendarView = $("#calendar").fullCalendar("getView");
+    var request = gapi.client.calendar.events.list({"calendarId": calendar.id, "timeMax": calendarView.visEnd.toISOString(), "timeMin": calendarView.visStart.toISOString()});
+    request.execute(function(response) {
+        var events = response.items;
+        var calEvents = [];
+        $.each(events, function(index) {
+           var tmpEvent = events[index];
+           var calEvent = createEvent(tmpEvent);
+           calEvents.push(calEvent);
+        });
+       $("#calendar").fullCalendar("addEventSource", calEvents);
+    });
+}
+
+function getFromDate(date) {
+    var fromDate = new Date(date.getTime());
+    fromDate.setHours(currentShiftType.from.hh);
+    fromDate.setMinutes(currentShiftType.from.mm);
+    return fromDate;
+}
+
+function getToDate(date) {
+    var toDate = new Date(date.getTime());
+    toDate.setHours(currentShiftType.to.hh);
+    toDate.setMinutes(currentShiftType.to.mm);
+    return toDate;
+}
+
+function eventAddedSuccessfully(response) {
+    $("#calendar").fullCalendar("addEventSource", [ createEvent(response) ]);
+    
+    $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
+    
+    if ($("#selected-dates-cont li").length === $("#selected-dates-cont li.successfullyAdded").length) {
+        $("#selected-dates-cont").empty();
+        $("#overview-dates-success").show();
+        $(".selectedDay").removeClass("selectedDay");
+        dates = [];
+    }
+}
+
+function handleCalendarResponse(response) {
+    if (response.code == 404) {
+        $("#error").html("Could not save all events.");
+        $("#error").dialog();
+    } else if (response.code == 401) {
+        login(submitDates);
+    } else if (response.status == "confirmed") {
+        eventAddedSuccessfully(response);
+    } else {
+        $("#error").html("Could not save events.");
+        $("#error").dialog();
+    }
 }
 
 function submitDates() {
     if (validate()) {
         var url = addCalendarURLTemplate.replace(/\{calendarId\}/g, calendar.id);
         url = url.replace(/\{access_token\}/g, $.localStorage.get("access_token"));
-        console.log(url);
         $.each(dates, function(index) {
             var date = dates[index];
-            var fromDate = new Date(date.getTime());
-            fromDate.setHours(currentShiftType.from.hh);
-            fromDate.setMinutes(currentShiftType.from.mm);
-            var toDate = new Date(date.getTime());
-            toDate.setHours(currentShiftType.to.hh);
-            toDate.setMinutes(currentShiftType.to.mm);
+            var fromDate = getFromDate(date);
+            var toDate = getToDate(date);
+            
             if (toDate < fromDate) {
                 toDate.setDate(toDate.getDate() + 1);
             }
@@ -86,13 +153,13 @@ function submitDates() {
                          "end":   { "dateTime": toDate.toISOString() },
                          "start": { "dateTime": fromDate.toISOString() }
                        };
-           console.log(data);
-             gapi.client.load("calendar", "v3", function () {
+            
+            gapi.client.load("calendar", "v3", function () {
                 var request = gapi.client.calendar.events.insert({"calendarId": calendar.id, "resource": data});
                 request.execute(function(response) {
-                    console.log(response);
-                })
-             });    
+                    handleCalendarResponse(response);
+                });
+            });    
         });
     }
 }
@@ -100,59 +167,105 @@ function submitDates() {
 function validate() {
     var errorText = "";
     if (calendar == null) {
-        errorText += "Please select a calendar\n";
+        errorText += "Please select a calendar<br />";
     }
     if (dates.length == 0) {
-        errorText += "No Dates selected\n";
+        errorText += "No Dates selected<br />";
     }
     if (currentShiftType == null) {
-        errorText += "No Shifttype selected\n";
+        errorText += "No Shifttype selected<br />";
     }
     if (errorText == "") {
         return true;
     } else {
-        alert(errorText);
+        $("#error").html(errorText);
+        $("#error").dialog();
         return false;
     }
+}
+
+function changeDateCssClass(clickedDate) {
+    if (clickedDate.hasClass("selectedDay")) {
+        clickedDate.removeClass("selectedDay");
+    } else {
+        clickedDate = clickedDate.addClass("selectedDay");
+    }
+}
+
+function selectDate(start, end, allDay, jsEvent, view) {
+    var currDate = start;
+    while (currDate <= end) {
+        var selectedDate = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
+        changeDateCssClass(selectedDate);
+        var dateIndex = dateSelected(currDate);
+        if (dateIndex === -1){
+            addDate(currDate);
+        } else { 
+            removeDate(currDate, dateIndex);
+        }
+        currDate.setDate(currDate.getDate() + 1);
+    }
+}
+
+function calendarTimeRangeChanged(view) {
+    $.each(dates, function(index) {
+        var date = dates[index];
+        if ($("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").length === 1) {
+            $("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").addClass("selectedDay");
+        }
+    });
+}
+
+function removeEvent(calEvent) {
+    var request = gapi.client.calendar.events.delete({"calendarId": calendar.id, "eventId": calEvent.id});
+    request.execute(function(response) {
+        if (response.code !== undefined) {
+            $("#error").html("The event could not be deleted, because an error occured!");
+            $("#error").dialog();
+        } else {
+            $("#calendar").fullCalendar("removeEvents", calEvent.id);
+        }
+    });
+}
+
+function eventClicked(calEvent, jsEvent, view, div) {
+    if ($(jsEvent.target).hasClass("removeEvent")) {
+        removeEvent(calEvent);
+    }
+}
+
+function eventMouseover(calEvent, jsEvent, view, div) {
+    div.append("<a href=\"#\" class=\"removeEvent\">x</a>");
+}
+
+function eventMouseout(calEvent, jsEvent, view, div) {
+    $(div).children(".removeEvent").remove();
 }
 
 $(document).ready(function() {   
     
     $("body").on("changeShiftType", changeShiftType);
     $("body").on("changeCalendar", changeCalendar);
-    
-    var selectionManager = (function(){
 
-        //define a "select" method for switching 'selected' state
-        return {
-            select: function(elementToSelect) {
-                if (elementToSelect.hasClass("selectedDay")) {
-                    elementToSelect.removeClass("selectedDay");
-                } else {
-                    curSelectedDay = elementToSelect.addClass("selectedDay");
-                }
-            }       
-        };
-    })();
-    
-   $("#calendar").fullCalendar({
-       firstDay: 1,
-       selectable: true,
-       selectHelper: true,
-       select: function(start, end, allDay, jsEvent, view) {
-            var currDate = start;
-            while (currDate <= end) {
-                var clickedEvent = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
-                selectionManager.select(clickedEvent);
-                var dateIndex = dateSelected(currDate);
-                if (dateIndex === -1){
-                    addDate(currDate);
-                } else { 
-                    removeDate(currDate, dateIndex);
-                }
-                currDate.setDate(currDate.getDate() + 1);
-            }
-       }
+    $("#calendar").fullCalendar({
+        firstDay: 1,
+        selectable: true,
+        selectHelper: true,
+        select: function(start, end, allDay, jsEvent, view) {
+            selectDate(start, end, allDay, jsEvent, view);
+        },
+        viewDisplay: function(view) {
+           calendarTimeRangeChanged(view);
+        },
+        eventClick: function(calEvent, jsEvent, view) {
+           eventClicked(calEvent, jsEvent, view, $(this));
+        },
+        eventMouseover: function(calEvent, jsEvent, view) {
+           eventMouseover(calEvent, jsEvent, view, $(this));
+        },
+        eventMouseout: function(calEvent, jsEvent, view) {
+           eventMouseout(calEvent, jsEvent, view, $(this));
+        }
    });
    
    $("#submit-overview").click(function() {

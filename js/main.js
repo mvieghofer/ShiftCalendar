@@ -141,7 +141,7 @@ function handleAuthClick(event) {
     return false;
 }
 
-function login() {
+function login(callback) {
     gapi.client.load('oauth2', 'v2', function() {
         var request = gapi.client.oauth2.userinfo.get();
         request.execute(function(resp) {
@@ -151,6 +151,9 @@ function login() {
             elem.html("<b>Hello " + resp.name + "</b>");
             
             getCalendarList();
+            if (callback != null) {
+                callback();
+            }
         });
     });
 }
