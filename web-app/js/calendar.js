@@ -63,11 +63,22 @@ function getCalendarSummary(calendar) {
 function changeCalendar(event, data) {
     calendar = data;
     $("#selected-calendar-cont").html(getCalendarSummary(calendar));
-    $("#calendar").fullCalendar("removeEvents");
     getCalendarEvents();
 }
 
+function createEvent(data) {
+    var calEvent = {
+           "id": data.id,
+           "title": data.summary,
+           "start": new Date(data.start.dateTime),
+           "end": new Date(data.end.dateTime),
+           "editable": true
+       };
+   return calEvent;
+}
+
 function getCalendarEvents() {
+    $("#calendar").fullCalendar("removeEvents");
     var calendarView = $("#calendar").fullCalendar("getView");
     var request = gapi.client.calendar.events.list({"calendarId": calendar.id, "timeMax": calendarView.visEnd.toISOString(), "timeMin": calendarView.visStart.toISOString()});
     request.execute(function(response) {
@@ -75,14 +86,7 @@ function getCalendarEvents() {
         var calEvents = [];
         $.each(events, function(index) {
            var tmpEvent = events[index];
-           var calEvent = {
-               "id": tmpEvent.id,
-               "title": tmpEvent.summary,
-               "start": new Date(tmpEvent.start.dateTime),
-               "end": new Date(tmpEvent.end.dateTime),
-               "editable": true
-           } 
-           console.log(calEvent);
+           var calEvent = createEvent(tmpEvent);
            calEvents.push(calEvent);
         });
        $("#calendar").fullCalendar("addEventSource", calEvents);
@@ -104,6 +108,9 @@ function getToDate(date) {
 }
 
 function eventAddedSuccessfully(response) {
+    console.log(response);
+    $("#calendar").fullCalendar("addEventSource", [ createEvent(response) ]);
+    
     $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
     
     if ($("#selected-dates-cont li").length === $("#selected-dates-cont li.successfullyAdded").length) {
@@ -210,6 +217,10 @@ function calendarTimeRangeChanged(view) {
     });
 }
 
+function eventClicked(calEvent, jsEvent, view) {
+    console.log($(this));
+}
+
 $(document).ready(function() {   
     
     $("body").on("changeShiftType", changeShiftType);
@@ -224,6 +235,9 @@ $(document).ready(function() {
        },
        viewDisplay: function(view) {
            calendarTimeRangeChanged(view);
+       },
+       eventClick: function(calEvent, jsEvent, view) {
+           eventClicked(calEvent, jsEvent, view);
        }
    });
    
