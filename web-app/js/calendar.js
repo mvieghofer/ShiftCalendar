@@ -64,20 +64,54 @@ function changeCalendar(event, data) {
     $("#selected-calendar-cont").html(getCalendarSummary(calendar));
 }
 
+function getFromDate(date) {
+    var fromDate = new Date(date.getTime());
+    fromDate.setHours(currentShiftType.from.hh);
+    fromDate.setMinutes(currentShiftType.from.mm);
+    return fromDate;
+}
+
+function getToDate(date) {
+    var toDate = new Date(date.getTime());
+    toDate.setHours(currentShiftType.to.hh);
+    toDate.setMinutes(currentShiftType.to.mm);
+    return toDate;
+}
+
+function eventAddedSuccessfully(response) {
+    $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
+    
+    if ($("#selected-dates-cont li").length === $("#selected-dates-cont li.successfullyAdded").length) {
+        $("#selected-dates-cont").empty();
+        $("#overview-dates-success").show();
+        $(".selectedDay").removeClass("selectedDay");
+        dates = [];
+    }
+}
+
+function handleCalendarResponse(response) {
+    if (response.code == 404) {
+        $("#error").html("Could not save all events.");
+        $("#error").dialog();
+    } else if (response.code == 401) {
+        login(submitDates);
+    } else if (response.status == "confirmed") {
+        eventAddedSuccessfully(response);
+    } else {
+        $("#error").html("Could not save events.");
+        $("#error").dialog();
+    }
+}
+
 function submitDates() {
     if (validate()) {
         var url = addCalendarURLTemplate.replace(/\{calendarId\}/g, calendar.id);
         url = url.replace(/\{access_token\}/g, $.localStorage.get("access_token"));
-        var requestsSent = 0;
-        var requestsSuccess = 0;
         $.each(dates, function(index) {
             var date = dates[index];
-            var fromDate = new Date(date.getTime());
-            fromDate.setHours(currentShiftType.from.hh);
-            fromDate.setMinutes(currentShiftType.from.mm);
-            var toDate = new Date(date.getTime());
-            toDate.setHours(currentShiftType.to.hh);
-            toDate.setMinutes(currentShiftType.to.mm);
+            var fromDate = getFromDate(date);
+            var toDate = getToDate(date);
+            
             if (toDate < fromDate) {
                 toDate.setDate(toDate.getDate() + 1);
             }
@@ -87,24 +121,11 @@ function submitDates() {
                          "end":   { "dateTime": toDate.toISOString() },
                          "start": { "dateTime": fromDate.toISOString() }
                        };
-            requestsSent++;
+            
             gapi.client.load("calendar", "v3", function () {
                 var request = gapi.client.calendar.events.insert({"calendarId": calendar.id, "resource": data});
                 request.execute(function(response) {
-                    console.log(response);
-                    if (response.code == 404) {
-                        console.log("Failure");
-                        $("#error").html("Could not save all events.");
-                        $("#error").dialog();
-                    } else if (response.code == 401) {
-                        login(submitDates);
-                    } else if (response.status == "confirmed") {
-                        $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
-                        console.log("Success! Event " + response.summary + " starting at: " + getDateString(new Date(response.start.dateTime), "dd.mm.yyyy") + ", ending at: " + new Date(response.end.dateTime).toLocaleDateString());
-                    } else {
-                        $("#error").html("Could not save events.");
-                        $("#error").dialog();
-                    }
+                    handleCalendarResponse(response);
                 });
             });    
         });

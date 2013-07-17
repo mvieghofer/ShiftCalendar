@@ -37,3 +37,15 @@
 #selected-dates-cont li {
     line-height: 25px;
 }
+
+#overview-dates-success {
+    background-image: url("../images/success.png");
+    background-position-x: 0;
+    background-repeat: no-repeat;
+    list-style: none;
+    width: 100%;
+    margin: 15px 0;
+    padding: 0 0 0 25px;
+    line-height: 25px;
+    display: none;
+}
