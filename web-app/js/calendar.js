@@ -63,6 +63,30 @@ function getCalendarSummary(calendar) {
 function changeCalendar(event, data) {
     calendar = data;
     $("#selected-calendar-cont").html(getCalendarSummary(calendar));
+    $("#calendar").fullCalendar("removeEvents");
+    getCalendarEvents();
+}
+
+function getCalendarEvents() {
+    var calendarView = $("#calendar").fullCalendar("getView");
+    var request = gapi.client.calendar.events.list({"calendarId": calendar.id, "timeMax": calendarView.visEnd.toISOString(), "timeMin": calendarView.visStart.toISOString()});
+    request.execute(function(response) {
+        var events = response.items;
+        var calEvents = [];
+        $.each(events, function(index) {
+           var tmpEvent = events[index];
+           var calEvent = {
+               "id": tmpEvent.id,
+               "title": tmpEvent.summary,
+               "start": new Date(tmpEvent.start.dateTime),
+               "end": new Date(tmpEvent.end.dateTime),
+               "editable": true
+           } 
+           console.log(calEvent);
+           calEvents.push(calEvent);
+        });
+       $("#calendar").fullCalendar("addEventSource", calEvents);
+    });
 }
 
 function getFromDate(date) {
