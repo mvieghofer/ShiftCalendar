@@ -22,3 +22,18 @@
     background: #ff0000;
     margin: auto;
 }
+
+.successfullyAdded {
+    background-image: url("../images/success.png");
+    background-position-x: 0;
+    background-repeat: no-repeat;
+    list-style: none;
+    width: 100%;
+    margin: 0 0 0 -25px;
+    padding: 0 0 0 25px;
+    line-height: 25px;
+}
+
+#selected-dates-cont li {
+    line-height: 25px;
+}

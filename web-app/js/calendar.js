@@ -68,7 +68,8 @@ function submitDates() {
     if (validate()) {
         var url = addCalendarURLTemplate.replace(/\{calendarId\}/g, calendar.id);
         url = url.replace(/\{access_token\}/g, $.localStorage.get("access_token"));
-        console.log(url);
+        var requestsSent = 0;
+        var requestsSuccess = 0;
         $.each(dates, function(index) {
             var date = dates[index];
             var fromDate = new Date(date.getTime());
@@ -86,13 +87,26 @@ function submitDates() {
                          "end":   { "dateTime": toDate.toISOString() },
                          "start": { "dateTime": fromDate.toISOString() }
                        };
-           console.log(data);
-             gapi.client.load("calendar", "v3", function () {
+            requestsSent++;
+            gapi.client.load("calendar", "v3", function () {
                 var request = gapi.client.calendar.events.insert({"calendarId": calendar.id, "resource": data});
                 request.execute(function(response) {
                     console.log(response);
-                })
-             });    
+                    if (response.code == 404) {
+                        console.log("Failure");
+                        $("#error").html("Could not save all events.");
+                        $("#error").dialog();
+                    } else if (response.code == 401) {
+                        login(submitDates);
+                    } else if (response.status == "confirmed") {
+                        $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
+                        console.log("Success! Event " + response.summary + " starting at: " + getDateString(new Date(response.start.dateTime), "dd.mm.yyyy") + ", ending at: " + new Date(response.end.dateTime).toLocaleDateString());
+                    } else {
+                        $("#error").html("Could not save events.");
+                        $("#error").dialog();
+                    }
+                });
+            });    
         });
     }
 }
@@ -100,18 +114,19 @@ function submitDates() {
 function validate() {
     var errorText = "";
     if (calendar == null) {
-        errorText += "Please select a calendar\n";
+        errorText += "Please select a calendar<br />";
     }
     if (dates.length == 0) {
-        errorText += "No Dates selected\n";
+        errorText += "No Dates selected<br />";
     }
     if (currentShiftType == null) {
-        errorText += "No Shifttype selected\n";
+        errorText += "No Shifttype selected<br />";
     }
     if (errorText == "") {
         return true;
     } else {
-        alert(errorText);
+        $("#error").html(errorText);
+        $("#error").dialog();
         return false;
     }
 }
