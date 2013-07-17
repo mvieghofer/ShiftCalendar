@@ -109,7 +109,6 @@ function getToDate(date) {
 }
 
 function eventAddedSuccessfully(response) {
-    console.log(response);
     $("#calendar").fullCalendar("addEventSource", [ createEvent(response) ]);
     
     $("#selected-dates-cont li:contains("+getDateString(new Date(response.start.dateTime), "dd.mm.yyyy")+")").addClass("successfullyAdded");
@@ -197,7 +196,6 @@ function selectDate(start, end, allDay, jsEvent, view) {
     var currDate = start;
     while (currDate <= end) {
         var selectedDate = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
-        console.log(selectedDate);
         changeDateCssClass(selectedDate);
         var dateIndex = dateSelected(currDate);
         if (dateIndex === -1){
@@ -218,28 +216,56 @@ function calendarTimeRangeChanged(view) {
     });
 }
 
-function eventClicked(calEvent, jsEvent, view) {
-    console.log($(this));
+function removeEvent(calEvent) {
+    var request = gapi.client.calendar.events.delete({"calendarId": calendar.id, "eventId": calEvent.id});
+    request.execute(function(response) {
+        if (response.code !== undefined) {
+            $("#error").html("The event could not be deleted, because an error occured!");
+            $("#error").dialog();
+        } else {
+            $("#calendar").fullCalendar("removeEvents", calEvent.id);
+        }
+    });
+}
+
+function eventClicked(calEvent, jsEvent, view, div) {
+    if ($(jsEvent.target).hasClass("removeEvent")) {
+        removeEvent(calEvent);
+    }
+}
+
+function eventMouseover(calEvent, jsEvent, view, div) {
+    div.append("<a href=\"#\" class=\"removeEvent\">x</a>");
+}
+
+function eventMouseout(calEvent, jsEvent, view, div) {
+    $(div).children(".removeEvent").remove();
 }
 
 $(document).ready(function() {   
     
     $("body").on("changeShiftType", changeShiftType);
     $("body").on("changeCalendar", changeCalendar);
-    
-   $("#calendar").fullCalendar({
-       firstDay: 1,
-       selectable: true,
-       selectHelper: true,
-       select: function(start, end, allDay, jsEvent, view) {
+
+    $("#calendar").fullCalendar({
+        firstDay: 1,
+        selectable: true,
+        selectHelper: true,
+        select: function(start, end, allDay, jsEvent, view) {
             selectDate(start, end, allDay, jsEvent, view);
-       },
-       viewDisplay: function(view) {
+        },
+        viewDisplay: function(view) {
            calendarTimeRangeChanged(view);
-       },
-       eventClick: function(calEvent, jsEvent, view) {
-           eventClicked(calEvent, jsEvent, view);
-       }
+        },
+        eventClick: function(calEvent, jsEvent, view) {
+           eventClicked(calEvent, jsEvent, view, $(this));
+        },
+        eventMouseover: function(calEvent, jsEvent, view) {
+           eventMouseover(calEvent, jsEvent, view, $(this));
+        },
+        eventMouseout: function(calEvent, jsEvent, view) {
+           eventMouseout(calEvent, jsEvent, view, $(this));
+        }
    });
    
    $("#submit-overview").click(function() {

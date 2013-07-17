@@ -49,3 +49,11 @@
     line-height: 25px;
     display: none;
 }
+
+.removeEvent {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    color: #ffffff;
+    text-decoration: none;
+}
