@@ -1,16 +1,5 @@
 Vision
 ======
-Currently it might be hard to add shifts of shift workers to the Google Calendar. It is especially hard when the shifts do not occur on a regular basis, as it might be for nurses. The aim of this project is to create a Google Chrome App that provides the functionality to define custom shift types and apply them to multiple days at once.
+The process of adding a shift schedule to your Google Calendar is currently not optimal (especially if the shifts have always the same start and end time). You either have to create each event on its own or you need to search for the last time the same shift type you want to add occured and duplicate it. It would be much easier, if it would be possible to define a few shift types that have predefined start and end times and add them to your calendar for multiple days at once.
 
-TODO
-====
-* Sign in with Google Account
-* Create custom shift types
-* Add calendar widget
-* Add shift types for multiple days at once
-
-What was done
-=============
-* Not much until now
-* Idea
-* Create Project
+This app tries to accomplish this. You can define your shift types that have a start time, a end time and a name and add them to your Google Calendar of choice for multiple days at once. If you want to see a demo, go to http://mvieghofer.github.io/ShiftCalendar.
