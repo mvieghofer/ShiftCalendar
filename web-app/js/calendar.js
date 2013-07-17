@@ -24,6 +24,7 @@ function changeShiftType(event, shiftType) {
 }
 
 function addDatesToView() {
+    $("#overview-dates-success").hide();
     dates.sort(compareDates);
     $("#selected-dates-cont").html("");
     $.each(dates, function(index) {
