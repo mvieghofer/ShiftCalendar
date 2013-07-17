@@ -8,4 +8,4 @@ This app tries to accomplish this. You can define your shift types that have a s
 
 Next Steps
 ==========
-Currently the only next planned step is a new user interface design.
+Currently the only next planned step is a new user interface design. If you have any suggestions for new features, please go to https://github.com/mvieghofer/ShiftCalendar/issues and add them there.
