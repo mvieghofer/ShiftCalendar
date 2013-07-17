@@ -10,10 +10,11 @@ function leadingZeroNumber(number) {
 
 function getDateString(date, format) {
     var dateString = "";
-    if (format === "dd.mm.yyyy")
+    if (format === "dd.mm.yyyy") {
         dateString = leadingZeroNumber(date.getDate()) + "." + leadingZeroNumber(date.getMonth() + 1) + "." + date.getFullYear();
-    else if (format === "yyyy-mm-dd")
+    } else if (format === "yyyy-mm-dd") {
         dateString = date.getFullYear() + "-" + leadingZeroNumber(date.getMonth() + 1) + "-" + leadingZeroNumber(date.getDate());
+    }
     return dateString;
 }
 
@@ -152,42 +153,53 @@ function validate() {
     }
 }
 
+function changeDateCssClass(clickedDate) {
+    if (clickedDate.hasClass("selectedDay")) {
+        clickedDate.removeClass("selectedDay");
+    } else {
+        clickedDate = clickedDate.addClass("selectedDay");
+    }
+}
+
+function selectDate(start, end, allDay, jsEvent, view) {
+    var currDate = start;
+    while (currDate <= end) {
+        var selectedDate = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
+        console.log(selectedDate);
+        changeDateCssClass(selectedDate);
+        var dateIndex = dateSelected(currDate);
+        if (dateIndex === -1){
+            addDate(currDate);
+        } else { 
+            removeDate(currDate, dateIndex);
+        }
+        currDate.setDate(currDate.getDate() + 1);
+    }
+}
+
+function calendarTimeRangeChanged(view) {
+    $.each(dates, function(index) {
+        var date = dates[index];
+        if ($("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").length === 1) {
+            $("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").addClass("selectedDay");
+        }
+    });
+}
+
 $(document).ready(function() {   
     
     $("body").on("changeShiftType", changeShiftType);
     $("body").on("changeCalendar", changeCalendar);
-    
-    var selectionManager = (function(){
-
-        //define a "select" method for switching 'selected' state
-        return {
-            select: function(elementToSelect) {
-                if (elementToSelect.hasClass("selectedDay")) {
-                    elementToSelect.removeClass("selectedDay");
-                } else {
-                    curSelectedDay = elementToSelect.addClass("selectedDay");
-                }
-            }       
-        };
-    })();
     
    $("#calendar").fullCalendar({
        firstDay: 1,
        selectable: true,
        selectHelper: true,
        select: function(start, end, allDay, jsEvent, view) {
-            var currDate = start;
-            while (currDate <= end) {
-                var clickedEvent = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
-                selectionManager.select(clickedEvent);
-                var dateIndex = dateSelected(currDate);
-                if (dateIndex === -1){
-                    addDate(currDate);
-                } else { 
-                    removeDate(currDate, dateIndex);
-                }
-                currDate.setDate(currDate.getDate() + 1);
-            }
+            selectDate(start, end, allDay, jsEvent, view);
+       },
+       viewDisplay: function(view) {
+           calendarTimeRangeChanged(view);
        }
    });
    
