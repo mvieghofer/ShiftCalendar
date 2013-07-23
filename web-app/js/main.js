@@ -147,7 +147,7 @@ function login(callback) {
             $("#login").hide();
             var elem = $("#user_info");
             if (!elem) return;
-            elem.html("<b>Hello " + resp.name + "</b>");
+            elem.html("<b>Hello, " + resp.name + "</b>");
             
             getCalendarList();
             if (callback != null) {
