@@ -4,7 +4,7 @@ The process of adding a shift schedule to your Google Calendar is currently not 
 
 About this App
 ==============
-This app tries to accomplish this. You can define your shift types that have a start time, a end time and a name and add them to your Google Calendar of choice for multiple days at once. If you want to see a demo, go to http://mvieghofer.github.io/ShiftCalendar.
+This app tries to accomplish this. You can define your shift types that have a start time, a end time and a name and add them to your Google Calendar of choice for multiple days at once. If you want to see a demo, go to http://mvieghofer.github.io/ShiftCalendar. If you want to look at the most up to date version check out the repo and test is locally.
 
 Next Steps
 ==========
