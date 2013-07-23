@@ -106,7 +106,6 @@ function getCalendarList() {
     gapi.client.load("calendar", "v3", function () {
         var request = gapi.client.calendar.calendarList.list();
         request.execute(function(resp) {
-            console.log(resp.items);
             calendars = resp.items;
             $.each(calendars, function(index, value) {
                var calendar = calendars[index]; 

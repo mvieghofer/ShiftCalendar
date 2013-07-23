@@ -11,7 +11,7 @@ body {
 #nav {
 	display: inline-block;
 	width: 15%;
-	padding-top: 5%;
+	padding-top: 100px;
 	padding-left: 5%;
 }
 
@@ -19,6 +19,7 @@ body {
 	display: inline-block;
 	position: absolute;
 	margin-left: 5%;
+	padding-top: 75px;
 	width: 73%;
 }
 
@@ -51,7 +52,9 @@ h2 {
 #login-cont {
 	font-size: 0.8em;
 	color: #000;
-	padding-bottom: 15%;
+	padding-left: 5%;
+	position: absolute;
+	top: 125px;
 }
 
 #login-cont a {
@@ -118,4 +121,8 @@ h2 {
     display: inline-block;
     width: 75px;
     margin-bottom: -2px;
+}
+
+#title {
+    text-align: center;
 }

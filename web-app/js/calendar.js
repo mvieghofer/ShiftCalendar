@@ -20,7 +20,6 @@ function getDateString(date, format) {
 
 function changeShiftType(event, shiftType) {
     currentShiftType = shiftType;
-    $("#selected-shift-type-cont").html("<div>" + shiftType.name + "</div>");
 }
 
 function addDatesToView() {
@@ -63,7 +62,6 @@ function getCalendarSummary(calendar) {
 
 function changeCalendar(event, data) {
     calendar = data;
-    $("#selected-calendar-cont").html(getCalendarSummary(calendar));
     getCalendarEvents();
 }
 
@@ -85,12 +83,14 @@ function getCalendarEvents() {
     request.execute(function(response) {
         var events = response.items;
         var calEvents = [];
-        $.each(events, function(index) {
-           var tmpEvent = events[index];
-           var calEvent = createEvent(tmpEvent);
-           calEvents.push(calEvent);
-        });
-       $("#calendar").fullCalendar("addEventSource", calEvents);
+        if (events !== undefined) {
+            $.each(events, function(index) {
+               var tmpEvent = events[index];
+               var calEvent = createEvent(tmpEvent);
+               calEvents.push(calEvent);
+            });
+            $("#calendar").fullCalendar("addEventSource", calEvents);
+        }
     });
 }
 
