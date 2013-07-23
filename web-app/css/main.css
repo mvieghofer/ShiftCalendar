@@ -1,11 +1,7 @@
-@font-face {
-  font-family: 'Merriweather Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Merriweather Sans Regular'), local('MerriweatherSans-Regular'), url("../fonts/Merriweather_Sans/MerriweatherSans-Regular.ttf") format('font/truetype');
-}
+@import url(http://fonts.googleapis.com/css?family=Merriweather:400,700italic);
+
 body {
-	font-family: 'Merriweather Sans', sans-serif;
+	font-family: 'Merriweather', serif;
 }
 
 #nav {
@@ -23,8 +19,15 @@ body {
 	width: 73%;
 }
 
+h1#title {
+    color: #009999;
+    margin-top: 50px;
+    text-shadow: 1px 1px #5CCCCC;
+    font-style: italic;
+}
+
 h2 {
-	color: #808080;
+	color: #009999;
 	font-size: 1.1em;
 	margin: 0;
 	display: inline;
@@ -54,7 +57,7 @@ h2 {
 	color: #000;
 	padding-left: 5%;
 	position: absolute;
-	top: 125px;
+	top: 150px;
 }
 
 #login-cont a {
@@ -72,11 +75,11 @@ h2 {
 }
 
 .sub-nav-entry:hover {
-	background: #ABABAB;
+	background: #FFd073;
 }
 
 .sub-nav-entry-active {
-	background: #ff0000;
+	background: #ffaa00;
 }
 
 .sub-nav-entry div {
