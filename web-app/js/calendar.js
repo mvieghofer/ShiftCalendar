@@ -25,6 +25,7 @@ function changeShiftType(event, shiftType) {
 function addDatesToView() {
     $("#overview-dates-success").hide();
     dates.sort(compareDates);
+    $.localStorage.set("dates", dates);
     $("#selected-dates-cont").html("");
     $.each(dates, function(index) {
         $("#selected-dates-cont").append("<li>" + getDateString(dates[index], "dd.mm.yyyy") + "</li>");
@@ -118,6 +119,7 @@ function eventAddedSuccessfully(response) {
         $("#overview-dates-success").show();
         $(".selectedDay").removeClass("selectedDay");
         dates = [];
+        $.localStorage.remove("dates");
     }
 }
 
@@ -273,4 +275,12 @@ $(document).ready(function() {
    });
    
    $(window).trigger("resize");
+   
+   if ($.localStorage.isSet("dates")) {
+       var d = $.localStorage.get("dates");
+       $.each(d, function(index) {
+          dates.push(new Date(d)); 
+       });
+       addDatesToView();
+   }
 });

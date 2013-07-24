@@ -1,13 +1,15 @@
-@import url(http://fonts.googleapis.com/css?family=Merriweather:400,700italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+@import url(http://fonts.googleapis.com/css?family=Oswald);
 
 body {
-	font-family: 'Merriweather', serif;
+    background: #FDFDFD;
+	font-family: 'Roboto', sans-serif;
 }
 
 #nav {
 	display: inline-block;
 	width: 15%;
-	padding-top: 100px;
+	padding-top: 50px;
 	padding-left: 5%;
 }
 
@@ -15,15 +17,17 @@ body {
 	display: inline-block;
 	position: absolute;
 	margin-left: 5%;
-	padding-top: 75px;
+	padding-top: 25px;
+	padding-bottom: 50px;
 	width: 73%;
 }
 
 h1#title {
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
     color: #009999;
     margin-top: 50px;
-    text-shadow: 1px 1px #5CCCCC;
-    font-style: italic;
+    font-size: 3em;
 }
 
 h2 {
@@ -34,7 +38,7 @@ h2 {
 }
 
 .sub-nav-cont-header {
-    border-bottom: #000 solid 1px;
+    border-bottom: #009999 solid 1px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -124,8 +128,4 @@ h2 {
     display: inline-block;
     width: 75px;
     margin-bottom: -2px;
-}
-
-#title {
-    text-align: center;
 }
