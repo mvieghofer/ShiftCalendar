@@ -42,11 +42,11 @@ function editShiftType(eventString, oldShiftName, newShiftType) {
 	saveShiftTypes();
 }
 
-function removeShiftType(currentAnchor) {
+function removeShiftType(shiftType) {
     if (confirm("Are you sure you want to delete this category?")) {
         var indexToDelete = -1;
         $.each(shiftTypes, function (index, value) {
-            if (shiftTypes[index].name === $(currentAnchor.siblings()[0]).html()) {
+            if (shiftTypes[index].name === shiftType.name) {
                 indexToDelete = index;
                 $("#shift-types li").remove(":contains('" + shiftTypes[index].name + "')");
             }
@@ -55,6 +55,7 @@ function removeShiftType(currentAnchor) {
             shiftTypes.splice(indexToDelete, 1);
         }
         saveShiftTypes();
+        $("#edit").dialog("close");
     }    
     return false;
 }
@@ -161,8 +162,30 @@ function loadCalendarView() {
     $("#main-cont").load("templates/calendar.html");
 }
 
-function loadEditShiftTypeView() {
-	$("#main-cont").load("templates/editShiftType.html");
+function editShiftType(shiftType) {
+    type = "editShiftTypeComplete";
+    oldShiftName = shiftType.name;
+    $("#shift-type-name").val(shiftType.name);
+    $("#from-time").val((shiftType.from.hh < 10 ? "0" + shiftType.from.hh : shiftType.from.hh) + ":" + (shiftType.from.hh < 10 ? "0" + shiftType.from.mm : shiftType.from.mm));
+    $("#from-time").trigger("change");
+    $("#to-time").val((shiftType.to.hh < 10 ? "0" + shiftType.to.hh : shiftType.to.hh) + ":" + (shiftType.to.mm < 10 ? "0" + shiftType.to.mm : shiftType.to.mm));
+    $("#to-time").trigger("change");
+}
+
+function loadEditShiftTypeView(option, shiftType) {
+    var title = "Edit Shift Type";
+    if (option === "add") {
+        title = "Add Shift Type";
+    } else if (option === "edit") {
+        $("#btn-remove-shift-type").show(); 
+        $("#btn-remove-shift-type").click(function() {
+            removeShiftType(getShiftType($(shiftType).children("div").html()));
+        })
+    }
+    $("#edit").dialog({width: "750px", title: title});
+    if (option === "edit") {
+	    editShiftType(getShiftType($(shiftType).children("div").html()));
+    }
 }
 
 $(document).ready(function() {
@@ -180,33 +203,16 @@ $(document).ready(function() {
             $("body").trigger("editShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));
         } else if ($(this).parent().attr("id") == "shift-types" && mode === "calendar") {
             $("body").trigger("changeShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));
-        } else if ($(this).parent().attr("id") == "calendars" && mode === "calendar") {
+        } else if ($(this).parent().attr("id") == "calendars" && mode === "calendar") {    
             $("body").trigger("changeCalendar", getCalendar($("#calendars > .sub-nav-entry-active > div").html()));
         }
 	});
 	
-	$("#btn-add-shift-type").click(function() {
-	    loadEditShiftTypeView();
+	$(document).on("dblclick", ".sub-nav-entry", function() { 
+	    loadEditShiftTypeView("edit", $(this));
 	});
 	
-	$("#btn-edit-shift-type").switchButton({checked: false, labels_placement: "right"});
-	
-	$("#edit-switch-wrapper").change(function() {
-	    if (mode !== "edit") {
-	        mode = "edit";
-    	    $(".sub-nav-entry a").show();
-    	    $(".sub-nav-entry a").click(function () {
-    	        removeShiftType($(this));
-    	    });
-            $("#main-cont").load("templates/editShiftType.html", function() {
-                if ($("#shift-types > .sub-nav-entry-active").length === 1) {
-            	    $("body").trigger("editShiftType", getShiftType($("#shift-types > .sub-nav-entry-active > div").html()));                
-                }
-            });
-        } else {
-            mode = "calendar";
-    	    $(".sub-nav-entry a").hide();
-            $("#main-cont").load("templates/calendar.html");
-        }
+	$("#btn-add-shift-type").click(function() {
+	    loadEditShiftTypeView("add");
 	});
 });

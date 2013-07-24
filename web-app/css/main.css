@@ -13,6 +13,10 @@ body {
 	padding-left: 5%;
 }
 
+#edit {
+    display: none;
+}
+
 #main-cont {
 	display: inline-block;
 	position: absolute;
@@ -114,18 +118,6 @@ h2 {
     z-index:99;
 }
 
-#edit-wrapper {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#edit-wrapper > span {
-    margin-right: -5px;
-}
-
-#edit-switch-wrapper {
-    display: inline-block;
-    width: 75px;
-    margin-bottom: -2px;
+#btn-remove-shift-type {
+    display: none;
 }

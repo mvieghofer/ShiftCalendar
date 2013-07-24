@@ -43,8 +43,10 @@ function submitShiftType(eventString, fromTime, toTime) {
                      "to": toTime};
     if (eventString == "editShiftTypeComplete")
         $("body").trigger(eventString, [oldShiftName, shiftType]);
-    else
+    else {
         $("body").trigger(eventString, shiftType);
+        $("#edit").dialog("close");
+    }
 }
 
 function editShiftType(event, shiftType) {

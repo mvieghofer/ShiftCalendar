@@ -62,8 +62,10 @@ function getCalendarSummary(calendar) {
 }
 
 function changeCalendar(event, data) {
-    calendar = data;
-    getCalendarEvents();
+    if (calendar !== data) {
+        calendar = data;
+        getCalendarEvents();
+    }
 }
 
 function createEvent(data) {
@@ -86,9 +88,9 @@ function getCalendarEvents() {
         var calEvents = [];
         if (events !== undefined) {
             $.each(events, function(index) {
-               var tmpEvent = events[index];
-               var calEvent = createEvent(tmpEvent);
-               calEvents.push(calEvent);
+                var tmpEvent = events[index];
+                var calEvent = createEvent(tmpEvent);
+                calEvents.push(calEvent);
             });
             $("#calendar").fullCalendar("addEventSource", calEvents);
         }
@@ -195,6 +197,9 @@ function changeDateCssClass(clickedDate) {
 }
 
 function selectDate(start, end, allDay, jsEvent, view) {
+    console.log("start: " + start);
+    console.log("end:" + end);
+    console.log("allDay: " + allDay);
     var currDate = start;
     while (currDate <= end) {
         var selectedDate = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
@@ -210,6 +215,7 @@ function selectDate(start, end, allDay, jsEvent, view) {
 }
 
 function calendarTimeRangeChanged(view) {
+    console.log("here");
     $.each(dates, function(index) {
         var date = dates[index];
         if ($("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").length === 1) {
@@ -245,6 +251,15 @@ function eventMouseout(calEvent, jsEvent, view, div) {
 }
 
 $(document).ready(function() {   
+    if ($.localStorage.isSet("dates")) {
+        var d = $.localStorage.get("dates");
+        d = d.split(",");
+        $.each(d, function(index) {
+            var tmpDate = new Date(d[index]);
+            dates.push(tmpDate); 
+        });
+        addDatesToView();
+    }
     
     $("body").on("changeShiftType", changeShiftType);
     $("body").on("changeCalendar", changeCalendar);
@@ -276,11 +291,5 @@ $(document).ready(function() {
    
    $(window).trigger("resize");
    
-   if ($.localStorage.isSet("dates")) {
-       var d = $.localStorage.get("dates");
-       $.each(d, function(index) {
-          dates.push(new Date(d)); 
-       });
-       addDatesToView();
-   }
+   
 });

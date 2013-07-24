@@ -3,13 +3,14 @@
 <head>
     <title>Shift Calendar</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.switchButton.css">
 	<link href="css/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="images/icon-16.png">
+    <link rel="stylesheet" type="text/css" href="css/jquery.timepicker.css" />
     <script type="text/javascript" src="js/jquery-min-2.0.3.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
-    <script type="text/javascript" src="js/jquery.switchButton.js"></script>
+    <script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
+    <script type="text/javascript" src="js/editShiftType.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
@@ -17,6 +18,28 @@
 <body>
     <h1 id="title">Shift Calendar</h1>
     <div id="error" title="Ups, an error occured..."></div>
+    <div id="edit" title="Edit Shift Type">
+        <ul id="error">
+        </ul>
+        <div id="add-shift-type-form" class="table">
+            <div class="row">
+                <div class="cell"><label>Name</label></div>
+                <div class="cell"><input type="text" placeholder="Name" id="shift-type-name"/></div>
+            </div>
+            <div class="row">
+                <div class="cell"><label>From</label></div>
+                <div class="cell"><input type="text" placeholder="hh:mm" id="from-time" /></div>
+                <div class="cell"><label>To</label></div>
+                <div class="cell"><input type="text" placeholder="hh:mm" id="to-time"/></div>
+                <div class="cell"><label>Duration</label></div>
+                <div class="cell"><label id="duration"/></div>
+            </div>
+            <div class="row">
+                <div class="cell"><input type="submit" id="btn-add-shift-type-submit" value="Submit" /></div>
+                <div class="cell"><input type="submit" id="btn-remove-shift-type" value="Remove" /></div>
+            </div>
+        </div>
+    </div>
     
     <div id="login-cont">
         <a href="#" id="login">Login</a>
@@ -25,13 +48,7 @@
     <div id="nav">
         <div class="sub-nav-cont">
             <div class="sub-nav-cont-header">
-                <h2>Shift Types</h2>
-                <div id="edit-wrapper">
-                    <span>Edit</span>
-                    <div id="edit-switch-wrapper">
-                        <input type="checkbox" href="#" id="btn-edit-shift-type" />
-                    </div>
-                </div>                
+                <h2>Shift Types</h2>              
             </div>
             <ul id="shift-types"></ul>
             <button id="btn-add-shift-type">+</button>
