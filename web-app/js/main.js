@@ -17,6 +17,7 @@ var apiKey = "AIzaSyDkhEAe8uYrRm1H2jMfCsI0yvHdBDX1GRc";
 var clientId = "1078839201967-5q93saldmof06varcsmdmgmjmgq81m7m";
 var scopes = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/userinfo.profile"];
 
+var removedShiftTypes = [];
 
 var SHIFT_TYPE_KEY = "shift-types";
 
@@ -44,8 +45,41 @@ function editShiftTypeComplete(eventString, oldShiftName, newShiftType) {
 	saveShiftTypes();
 }
 
+function saveRemovedShiftTypes() {
+    $.localStorage.set("removed-shift-types", removedShiftTypes);
+}
+
+function removeShiftTypeCommit() {
+    removedShiftTypes.shift();
+    saveRemovedShiftTypes();
+    if (removedShiftTypes.length > 0) {
+        $("#undo-cont").html("You removed " + removedShiftTypes.length + " shift types. <a href=\"#\" id=\"undo\">Undo</a><a href=\"#\" id=\"undo-close\">x</a>");
+    } else {
+        $("#undo-cont").hide();
+    }
+}
+
+function removeAllShiftTypeCommit() {
+    removedShiftTypes = [];
+    saveRemovedShiftTypes();
+    $("#undo-cont").hide();
+}
+
+function removeShiftTypeUndo() {
+    $.each(removedShiftTypes, function(index) {
+        var shiftType = removedShiftTypes.shift();
+        addShiftType("", shiftType);
+    });
+    $("#undo-cont").hide();
+}
+
 function removeShiftType(shiftType) {
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (shiftType !== undefined) {
+        removedShiftTypes.push(shiftType);
+        saveRemovedShiftTypes();
+        setInterval(removeShiftTypeCommit, 30 * 1000);
+        $("#undo-cont").html("You removed " + removedShiftTypes.length + " shift types. <a href=\"#\" id=\"undo\">Undo</a><a href=\"#\" id=\"undo-close\">x</a></div>");
+        $("#undo-cont").show();
         var indexToDelete = -1;
         $.each(shiftTypes, function (index, value) {
             if (shiftTypes[index].name === shiftType.name) {
@@ -57,8 +91,8 @@ function removeShiftType(shiftType) {
             shiftTypes.splice(indexToDelete, 1);
         }
         saveShiftTypes();
-        $("#edit").dialog("close");
-    }    
+        $("#edit").dialog("close");   
+    } 
     return false;
 }
 
@@ -81,6 +115,8 @@ function setUp() {
 	
     loadCalendarView();
 	
+	$(document).on("click", "#undo", removeShiftTypeUndo);
+	$(document).on("click", "#undo-close", removeAllShiftTypeCommit);
 	$("body").on("addShiftType", addShiftType);
 	$("body").on("editShiftTypeComplete", editShiftTypeComplete);
 	$("body").on("checkNameUniquness", checkNameUniqueness);
@@ -165,6 +201,7 @@ function loadCalendarView() {
 }
 
 function initEditShiftType(shiftType) {
+    console.log("init " + shiftType);
     type = "editShiftTypeComplete";
     oldShiftName = shiftType.name;
     $("#shift-type-name").val(shiftType.name);
@@ -190,10 +227,16 @@ function loadEditShiftTypeView(option, shiftType) {
     } else if (option === "edit") {
         $("#btn-remove-shift-type").show(); 
         $("#btn-remove-shift-type").click(function() {
-            removeShiftType(getShiftType($(shiftType).children("div").html()));
+            removeShiftType(getShiftType($("#shift-type-name").val()));
         })
     }
-    editDialog = $("#edit").dialog({width: "750px", title: title});
+    editDialog = $("#edit").dialog({
+        width: "750px", 
+        title: title,
+        close: function() {
+            mode = "calendar";
+        }
+    });
     if (option === "edit") {
 	    initEditShiftType(getShiftType($(shiftType).children("div").html()));
     }
@@ -228,6 +271,7 @@ $(document).ready(function() {
 	});
 	
 	$("#btn-add-shift-type").click(function() {
+	    type = "addShiftType";
 	    $(".sub-nav-entry-active").removeClass("sub-nav-entry-active"); 
 	    loadEditShiftTypeView("add");
 	});

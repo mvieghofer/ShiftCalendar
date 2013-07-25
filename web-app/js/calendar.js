@@ -254,8 +254,10 @@ $(document).ready(function() {
         var d = $.localStorage.get("dates");
         d = d.split(",");
         $.each(d, function(index) {
-            var tmpDate = new Date(d[index]);
-            dates.push(tmpDate); 
+            if (d[index] !== "Invalid Date") {
+                var tmpDate = new Date(d[index]);
+                dates.push(tmpDate); 
+            }
         });
         addDatesToView();
     }

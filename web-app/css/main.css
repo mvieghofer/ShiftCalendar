@@ -122,3 +122,21 @@ h2 {
 #btn-remove-shift-type {
     display: none;
 }
+
+#undo-cont {
+    position: absolute;
+    top: 10px;
+    right: 25%;
+    left: 25%;
+    text-align: center;
+    background: #ffaa00;
+    padding: 5px;
+    border-radius:5px;
+    display: none;
+}
+
+#undo-close {
+    position: absolute;
+    right: 5px;
+    text-decoration: none;
+}
