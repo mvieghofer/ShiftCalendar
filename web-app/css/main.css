@@ -109,7 +109,8 @@ h2 {
 }
 
 .cell {
-	display: table-cell;    
+	display: table-cell;
+	padding: 2px 5px;    
 }
 
 

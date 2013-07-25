@@ -215,7 +215,6 @@ function selectDate(start, end, allDay, jsEvent, view) {
 }
 
 function calendarTimeRangeChanged(view) {
-    console.log("here");
     $.each(dates, function(index) {
         var date = dates[index];
         if ($("td.fc-day[data-date=\"" + getDateString(date, "yyyy-mm-dd") + "\"]").length === 1) {
