@@ -20,12 +20,12 @@ function getDateString(date, format) {
 
 function changeShiftType(event, shiftType) {
     currentShiftType = shiftType;
-    $("#selected-shift-type-cont").html("<div>" + shiftType.name + "</div>");
 }
 
 function addDatesToView() {
     $("#overview-dates-success").hide();
     dates.sort(compareDates);
+    $.localStorage.set("dates", dates);
     $("#selected-dates-cont").html("");
     $.each(dates, function(index) {
         $("#selected-dates-cont").append("<li>" + getDateString(dates[index], "dd.mm.yyyy") + "</li>");
@@ -62,9 +62,10 @@ function getCalendarSummary(calendar) {
 }
 
 function changeCalendar(event, data) {
-    calendar = data;
-    $("#selected-calendar-cont").html(getCalendarSummary(calendar));
-    getCalendarEvents();
+    if (calendar !== data) {
+        calendar = data;
+        getCalendarEvents();
+    }
 }
 
 function createEvent(data) {
@@ -85,12 +86,14 @@ function getCalendarEvents() {
     request.execute(function(response) {
         var events = response.items;
         var calEvents = [];
-        $.each(events, function(index) {
-           var tmpEvent = events[index];
-           var calEvent = createEvent(tmpEvent);
-           calEvents.push(calEvent);
-        });
-       $("#calendar").fullCalendar("addEventSource", calEvents);
+        if (events !== undefined) {
+            $.each(events, function(index) {
+                var tmpEvent = events[index];
+                var calEvent = createEvent(tmpEvent);
+                calEvents.push(calEvent);
+            });
+            $("#calendar").fullCalendar("addEventSource", calEvents);
+        }
     });
 }
 
@@ -118,6 +121,7 @@ function eventAddedSuccessfully(response) {
         $("#overview-dates-success").show();
         $(".selectedDay").removeClass("selectedDay");
         dates = [];
+        $.localStorage.remove("dates");
     }
 }
 
@@ -193,6 +197,9 @@ function changeDateCssClass(clickedDate) {
 }
 
 function selectDate(start, end, allDay, jsEvent, view) {
+    console.log("start: " + start);
+    console.log("end:" + end);
+    console.log("allDay: " + allDay);
     var currDate = start;
     while (currDate <= end) {
         var selectedDate = $("td.fc-day[data-date=\"" + getDateString(currDate, "yyyy-mm-dd") + "\"]");
@@ -243,6 +250,17 @@ function eventMouseout(calEvent, jsEvent, view, div) {
 }
 
 $(document).ready(function() {   
+    if ($.localStorage.isSet("dates")) {
+        var d = $.localStorage.get("dates");
+        d = d.split(",");
+        $.each(d, function(index) {
+            if (d[index] !== "Invalid Date") {
+                var tmpDate = new Date(d[index]);
+                dates.push(tmpDate); 
+            }
+        });
+        addDatesToView();
+    }
     
     $("body").on("changeShiftType", changeShiftType);
     $("body").on("changeCalendar", changeCalendar);
@@ -273,4 +291,6 @@ $(document).ready(function() {
    });
    
    $(window).trigger("resize");
+   
+   
 });

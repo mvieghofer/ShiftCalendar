@@ -1,36 +1,48 @@
-@font-face {
-  font-family: 'Merriweather Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Merriweather Sans Regular'), local('MerriweatherSans-Regular'), url("../fonts/Merriweather_Sans/MerriweatherSans-Regular.ttf") format('font/truetype');
-}
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+@import url(http://fonts.googleapis.com/css?family=Oswald);
+
 body {
-	font-family: 'Merriweather Sans', sans-serif;
+    background: #FDFDFD;
+	font-family: 'Roboto', sans-serif;
 }
 
 #nav {
 	display: inline-block;
 	width: 15%;
-	padding-top: 5%;
+	padding-top: 50px;
 	padding-left: 5%;
+}
+
+#edit {
+    display: none;
 }
 
 #main-cont {
 	display: inline-block;
 	position: absolute;
 	margin-left: 5%;
+	padding-top: 25px;
+	padding-bottom: 50px;
 	width: 73%;
 }
 
+h1#title {
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+    color: #009999;
+    margin-top: 50px;
+    font-size: 3em;
+}
+
 h2 {
-	color: #808080;
+	color: #009999;
 	font-size: 1.1em;
 	margin: 0;
 	display: inline;
 }
 
 .sub-nav-cont-header {
-    border-bottom: #000 solid 1px;
+    border-bottom: #009999 solid 1px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -51,7 +63,9 @@ h2 {
 #login-cont {
 	font-size: 0.8em;
 	color: #000;
-	padding-bottom: 15%;
+	padding-left: 5%;
+	position: absolute;
+	top: 150px;
 }
 
 #login-cont a {
@@ -69,11 +83,11 @@ h2 {
 }
 
 .sub-nav-entry:hover {
-	background: #ABABAB;
+	background: #FFd073;
 }
 
 .sub-nav-entry-active {
-	background: #ff0000;
+	background: #ffaa00;
 }
 
 .sub-nav-entry div {
@@ -95,7 +109,8 @@ h2 {
 }
 
 .cell {
-	display: table-cell;    
+	display: table-cell;
+	padding: 2px 5px;    
 }
 
 
@@ -104,18 +119,24 @@ h2 {
     z-index:99;
 }
 
-#edit-wrapper {
+#btn-remove-shift-type {
+    display: none;
+}
+
+#undo-cont {
     position: absolute;
-    right: 0;
-    top: 0;
+    top: 10px;
+    right: 25%;
+    left: 25%;
+    text-align: center;
+    background: #ffaa00;
+    padding: 5px;
+    border-radius:5px;
+    display: none;
 }
 
-#edit-wrapper > span {
-    margin-right: -5px;
-}
-
-#edit-switch-wrapper {
-    display: inline-block;
-    width: 75px;
-    margin-bottom: -2px;
+#undo-close {
+    position: absolute;
+    right: 5px;
+    text-decoration: none;
 }

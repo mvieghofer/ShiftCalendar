@@ -38,23 +38,16 @@ function calcDiff(time1, time2) {
 }
 
 function submitShiftType(eventString, fromTime, toTime) {
+    console.log(eventString);
     var shiftType = {"name": $("#shift-type-name").val(), 
                      "from": fromTime,
                      "to": toTime};
     if (eventString == "editShiftTypeComplete")
         $("body").trigger(eventString, [oldShiftName, shiftType]);
-    else
+    else {
         $("body").trigger(eventString, shiftType);
-}
-
-function editShiftType(event, shiftType) {
-    type = "editShiftTypeComplete";
-    oldShiftName = shiftType.name;
-    $("#shift-type-name").val(shiftType.name);
-    $("#from-time").val((shiftType.from.hh < 10 ? "0" + shiftType.from.hh : shiftType.from.hh) + ":" + (shiftType.from.hh < 10 ? "0" + shiftType.from.mm : shiftType.from.mm));
-    $("#from-time").trigger("change");
-    $("#to-time").val((shiftType.to.hh < 10 ? "0" + shiftType.to.hh : shiftType.to.hh) + ":" + (shiftType.to.mm < 10 ? "0" + shiftType.to.mm : shiftType.to.mm));
-    $("#to-time").trigger("change");
+    }    
+    $("#edit").dialog("close");
 }
 
 function checkNameUniqunessResult(event, uniqueness) {
@@ -70,7 +63,6 @@ $(document).ready(function() {
         toTime = {"hh": 0, "mm": 0},
         duration = {"hh": 0, "mm": 0};
         
-    $("body").on("editShiftType", editShiftType);
     $("body").on("checkNameUniqunessResult", checkNameUniqunessResult);
     
     $("#from-time").change(function() {
