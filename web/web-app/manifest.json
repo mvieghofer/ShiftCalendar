@@ -8,7 +8,7 @@
   
   "app": {
       "launch": {
-            "web_url": "http://mvieghofer.github.io/ShiftCalendar/"
+            "web_url": "http://markusvieghofer.at/shiftCalendar/"
             }
   }
 }

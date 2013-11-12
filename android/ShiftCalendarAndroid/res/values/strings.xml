@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ShiftCalendar</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_type">Type</string>
+    <string name="title_date">Select Date</string>
+    <string name="title_summary">Summary</string>
+    <string name="new_shift_type">New Shift Type</string>
+    <string name="add_shift_type">Add Shift Type</string>
+    <string name="type_name">Type Name</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+
+</resources>
