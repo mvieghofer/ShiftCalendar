@@ -1,8 +1,12 @@
 package at.markusvieghofer.shiftcalendar.models;
 
+import java.io.Serializable;
+
 import at.markusvieghofer.shiftcalendar.models.api.Model;
 
-public class User implements Model {
+public class User implements Model, Serializable {
+	private static final long serialVersionUID = 1195992695904424703L;
+	public static final String KEY = "User";
 	private Long id;
 	private String firstName;
 	private String lastName;
