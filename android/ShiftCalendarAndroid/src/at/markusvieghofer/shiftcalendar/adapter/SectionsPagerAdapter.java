@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import at.markusvieghofer.shiftcalendar.R;
 import at.markusvieghofer.shiftcalendar.fragments.CalendarFragment;
+import at.markusvieghofer.shiftcalendar.fragments.CalendarSelectionFragment;
 import at.markusvieghofer.shiftcalendar.fragments.TypeFragment;
 
 /**
@@ -49,7 +50,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	private void initFragments() {
 		fragments.add(new TypeFragment());
 		fragments.add(new CalendarFragment());
-		fragments.add(new TypeFragment());
+		fragments.add(new CalendarSelectionFragment());
 
 		pageTitles.add(R.string.title_type);
 		pageTitles.add(R.string.title_date);

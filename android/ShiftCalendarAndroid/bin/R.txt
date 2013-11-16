@@ -50,6 +50,7 @@ int string from 0x7f06000b
 int string invalid_date 0x7f060001
 int string month_name_format 0x7f060002
 int string new_shift_type 0x7f060008
+int string passed_model_not_of_type_user 0x7f06000d
 int string title_date 0x7f060006
 int string title_summary 0x7f060007
 int string title_type 0x7f060005

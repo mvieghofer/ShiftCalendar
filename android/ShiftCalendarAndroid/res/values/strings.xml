@@ -11,5 +11,6 @@
     <string name="type_name">Type Name</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="passed_model_not_of_type_user">Passed model not of type User</string>
 
 </resources>
