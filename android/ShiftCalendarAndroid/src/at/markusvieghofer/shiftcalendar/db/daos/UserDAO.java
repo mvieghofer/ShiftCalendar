@@ -22,7 +22,14 @@ public class UserDAO implements DAO {
 	private static final String COL_LASTNAME = "lastName";
 	private static final String COL_EMAIL = "email";
 
-	public static final String CREATE_TABLE = "";
+	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
+			+ " ( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ COL_FIRSTNAME + " VARCHAR NOT NULL, " + COL_LASTNAME
+			+ " VARCHAR NOT NULL, " + COL_EMAIL + " VARCHAR NOT NULL )";
+
+	public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
+			+ TABLE_NAME;
+
 	private DBHelper dbHelper;
 	private Context context;
 

@@ -2,15 +2,19 @@
 <resources>
 
     <string name="app_name">ShiftCalendar</string>
+    <string name="login">Login</string>
     <string name="action_settings">Settings</string>
     <string name="title_type">Type</string>
     <string name="title_date">Select Date</string>
-    <string name="title_summary">Summary</string>
+    <string name="title_calendar_selction">Select Calendar</string>
     <string name="new_shift_type">New Shift Type</string>
     <string name="add_shift_type">Add Shift Type</string>
     <string name="type_name">Type Name</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="passed_model_not_of_type_user">Passed model not of type User</string>
+    <string name="login_desc">Please select the account you want to login to</string>
+    <string name="previous_month">&lt; Previous Month</string>
+    <string name="next_month">Next Month &gt;</string>
 
 </resources>

@@ -25,6 +25,8 @@ public class TypeDAO implements DAO {
 			+ " ( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ COL_NAME + " VARCHAR NOT NULL, " + COL_FROM
 			+ " INTEGER NOT NULL, " + COL_TO + " INTEGER NOT NULL )";
+	public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
+			+ TABLE_NAME;
 	private DBHelper dbHelper;
 
 	public TypeDAO(Context context) {

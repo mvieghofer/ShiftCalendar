@@ -5,12 +5,13 @@ import java.io.Serializable;
 import at.markusvieghofer.shiftcalendar.models.api.Model;
 
 public class User implements Model, Serializable {
+	public static final long INVALID_USER_ID = -1L;
 	private static final long serialVersionUID = 1195992695904424703L;
 	public static final String KEY = "User";
-	private Long id;
-	private String firstName;
-	private String lastName;
-	private String email;
+	private Long id = INVALID_USER_ID;
+	private String firstName = "";
+	private String lastName = "";
+	private String email = "";
 
 	public String getEmail() {
 		return email;
