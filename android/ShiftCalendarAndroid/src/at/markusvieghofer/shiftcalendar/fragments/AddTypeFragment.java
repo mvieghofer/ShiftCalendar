@@ -16,6 +16,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import at.markusvieghofer.shiftcalendar.R;
 import at.markusvieghofer.shiftcalendar.fragments.api.TimeChangeListener;
+import at.markusvieghofer.shiftcalendar.fragments.api.TypeListener;
 import at.markusvieghofer.shiftcalendar.models.Type;
 
 public class AddTypeFragment extends DialogFragment implements
@@ -69,7 +70,7 @@ public class AddTypeFragment extends DialogFragment implements
 			getDialog().cancel();
 		}
 	};
-	private TypeFragment parent;
+	private TypeListener parent;
 
 	public AddTypeFragment() {
 	}
@@ -83,8 +84,8 @@ public class AddTypeFragment extends DialogFragment implements
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		Bundle arguments = getArguments();
 		Serializable parentSer = arguments.getSerializable(TypeFragment.KEY);
-		if (parentSer instanceof TypeFragment) {
-			parent = (TypeFragment) parentSer;
+		if (parentSer instanceof TypeListener) {
+			parent = (TypeListener) parentSer;
 		}
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.fragment_add_type, null);

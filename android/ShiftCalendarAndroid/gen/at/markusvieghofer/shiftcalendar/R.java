@@ -273,19 +273,20 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001d;
     }
     public static final class id {
-        public static final int btnAddShiftType=0x7f08000d;
+        public static final int btnAddShiftType=0x7f08000e;
         public static final int btnNextMonth=0x7f08000b;
         public static final int btnPrevMonth=0x7f08000a;
         public static final int calendar=0x7f080009;
-        public static final int calendar_grid=0x7f08000f;
+        public static final int calendar_grid=0x7f080010;
         public static final int hybrid=0x7f080004;
+        public static final int lblRemoveType=0x7f08000d;
         public static final int none=0x7f080000;
         public static final int normal=0x7f080001;
         public static final int pager=0x7f080005;
         public static final int satellite=0x7f080002;
         public static final int section_label=0x7f08000c;
         public static final int terrain=0x7f080003;
-        public static final int title=0x7f08000e;
+        public static final int title=0x7f08000f;
         public static final int txtTimeFrom=0x7f080007;
         public static final int txtTimeTo=0x7f080008;
         public static final int txtTypeName=0x7f080006;
@@ -299,9 +300,10 @@ containing a value of this type.
         public static final int fragment_add_type=0x7f030002;
         public static final int fragment_calendar=0x7f030003;
         public static final int fragment_main_dummy=0x7f030004;
-        public static final int fragment_type=0x7f030005;
-        public static final int month=0x7f030006;
-        public static final int week=0x7f030007;
+        public static final int fragment_remove_type=0x7f030005;
+        public static final int fragment_type=0x7f030006;
+        public static final int month=0x7f030007;
+        public static final int week=0x7f030008;
     }
     public static final class string {
         public static final int action_settings=0x7f06001f;
@@ -415,6 +417,7 @@ containing a value of this type.
         public static final int ok=0x7f06002c;
         public static final int passed_model_not_of_type_user=0x7f060028;
         public static final int previous_month=0x7f06002a;
+        public static final int remove_type=0x7f060030;
         public static final int title_calendar_selction=0x7f060022;
         public static final int title_date=0x7f060021;
         public static final int title_type=0x7f060020;

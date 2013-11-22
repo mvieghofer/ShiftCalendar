@@ -20,5 +20,6 @@
     <string name="cancel">Cancel</string> 
     <string name="no_date_entered">No date entered!</string>
     <string name="no_type_entered">No type entered!</string>
+    <string name="remove_type">Do you really want to remove the type %1?</string>
 
 </resources>

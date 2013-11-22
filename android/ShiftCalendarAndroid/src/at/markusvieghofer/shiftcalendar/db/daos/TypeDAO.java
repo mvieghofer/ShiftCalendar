@@ -33,6 +33,19 @@ public class TypeDAO implements DAO {
 		dbHelper = new DBHelper(context);
 	}
 
+	public int delete(Model model) {
+		if (model != null && model instanceof Type) {
+			Type type = (Type) model;
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+			String whereClause = COL_ID + " = ?";
+			String[] whereArgs = new String[] { String.valueOf(type.getId()) };
+			return database.delete(TABLE_NAME, whereClause, whereArgs);
+		} else {
+			throw new IllegalArgumentException(
+					"Model passed is not of type 'Type'");
+		}
+	}
+
 	@Override
 	public List<? extends Model> readAll() {
 		List<Type> models = new ArrayList<Type>();

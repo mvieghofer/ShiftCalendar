@@ -1,8 +1,5 @@
 package at.markusvieghofer.shiftcalendar.fragments;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.os.Bundle;
@@ -11,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import at.markusvieghofer.shiftcalendar.R;
+import at.markusvieghofer.shiftcalendar.adapter.TypeAdapter;
 import at.markusvieghofer.shiftcalendar.db.daos.TypeDAO;
+import at.markusvieghofer.shiftcalendar.fragments.api.TypeListener;
 import at.markusvieghofer.shiftcalendar.models.Type;
 
-public class TypeFragment extends ListFragment implements Serializable {
+public class TypeFragment extends ListFragment implements TypeListener {
 	/**
 	 * 
 	 */
@@ -26,18 +23,18 @@ public class TypeFragment extends ListFragment implements Serializable {
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	public static final String TAG = TypeFragment.class.getSimpleName();
 	protected static final String KEY = TypeFragment.class.getSimpleName();
-	private EditText txtTypeName;
-	private EditText txtFrom;
-	private EditText txtTo;
-	private Calendar from;
-	private Calendar to;
-	private List<Type> types = new ArrayList<Type>();
+	private TypeAdapter typeAdapter;
 
+	@Override
 	public void addType(Type type) {
 		saveType(type);
-		types.add(type);
-		setListAdapter(new ArrayAdapter<Type>(getActivity(),
-				android.R.layout.simple_list_item_single_choice, types));
+		typeAdapter.add(type);
+		setListAdapter(typeAdapter);
+	}
+
+	@Override
+	public String getKey() {
+		return KEY;
 	}
 
 	@Override
@@ -45,7 +42,6 @@ public class TypeFragment extends ListFragment implements Serializable {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_type, container,
 				false);
-		readAllTypes();
 		initView(rootView);
 		return rootView;
 	}
@@ -56,21 +52,11 @@ public class TypeFragment extends ListFragment implements Serializable {
 		super.onViewCreated(view, savedInstanceState);
 	}
 
-	protected Type createTypeModel() {
-		Type type = new Type();
-		type.setName(txtTypeName.getText().toString());
-		type.setFrom(from);
-		type.setTo(to);
-		return type;
-	}
-
-	private void addType(final View contNewType, final Button btnAddShiftType) {
-		Type type = createTypeModel();
-		TypeDAO typeDAO = new TypeDAO(getActivity().getApplicationContext());
-		type.setId(typeDAO.save(type));
-		types.add(type);
-		contNewType.setVisibility(View.GONE);
-		btnAddShiftType.setText(getString(R.string.new_shift_type));
+	@Override
+	public void removeType(Type type) {
+		TypeDAO typeDAO = new TypeDAO(getActivity());
+		typeDAO.delete(type);
+		typeAdapter.remove(type);
 	}
 
 	private void initView(View rootView) {
@@ -89,15 +75,16 @@ public class TypeFragment extends ListFragment implements Serializable {
 				frag.show(getActivity().getSupportFragmentManager(), TAG);
 			}
 		});
-
-		setListAdapter(new ArrayAdapter<Type>(getActivity(),
-				android.R.layout.simple_list_item_single_choice, types));
+		typeAdapter = new TypeAdapter(getActivity(),
+				android.R.layout.simple_list_item_single_choice,
+				readAllTypes(), getFragmentManager(), this);
+		setListAdapter(typeAdapter);
 	}
 
 	@SuppressWarnings("unchecked")
-	private void readAllTypes() {
+	private List<Type> readAllTypes() {
 		TypeDAO typeDAO = new TypeDAO(getActivity().getApplicationContext());
-		types = (List<Type>) typeDAO.readAll();
+		return (List<Type>) typeDAO.readAll();
 	}
 
 	private void saveType(Type type) {

@@ -1,10 +1,16 @@
 package at.markusvieghofer.shiftcalendar.models;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import at.markusvieghofer.shiftcalendar.models.api.Model;
 
-public class Type implements Model {
+public class Type implements Model, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1495214082127315619L;
+	public static final String KEY = "Type";
 	private String name;
 	private Calendar from;
 	private Calendar to;

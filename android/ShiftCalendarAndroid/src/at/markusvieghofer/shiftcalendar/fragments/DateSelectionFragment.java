@@ -3,9 +3,6 @@ package at.markusvieghofer.shiftcalendar.fragments;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.Fragment;
@@ -71,27 +68,27 @@ public class DateSelectionFragment extends Fragment {
 	private void initCalendarEvents() {
 		calendarView.init(calDate.getTime(), calDate.getTime()).inMode(
 				SelectionMode.MULTIPLE);
-		if (calendar != null) {
-			ContentResolver contentResolver = getActivity()
-					.getContentResolver();
-			Uri uri = Events.CONTENT_URI;
-			String selection = Events.CALENDAR_ID + " = ? AND "
-					+ Events.DTSTART + " >= ? AND " + Events.DTEND + " <= ?";
-			Calendar startDate = getEventStartDate();
-
-			Calendar endDate = getEventEndDate();
-
-			String[] selectionArgs = new String[] {
-					String.valueOf(calendar.getId()),
-					String.valueOf(startDate.getTime().getTime()),
-					String.valueOf(endDate.getTime().getTime()) };
-			Cursor cursor = contentResolver.query(uri, projection, selection,
-					selectionArgs, null);
-			while (cursor.moveToNext()) {
-				System.out.println(cursor.getString(1));
-			}
-			cursor.close();
-		}
+		// if (calendar != null) {
+		// ContentResolver contentResolver = getActivity()
+		// .getContentResolver();
+		// Uri uri = Events.CONTENT_URI;
+		// String selection = Events.CALENDAR_ID + " = ? AND "
+		// + Events.DTSTART + " >= ? AND " + Events.DTEND + " <= ?";
+		// Calendar startDate = getEventStartDate();
+		//
+		// Calendar endDate = getEventEndDate();
+		//
+		// String[] selectionArgs = new String[] {
+		// String.valueOf(calendar.getId()),
+		// String.valueOf(startDate.getTime().getTime()),
+		// String.valueOf(endDate.getTime().getTime()) };
+		// Cursor cursor = contentResolver.query(uri, projection, selection,
+		// selectionArgs, null);
+		// while (cursor.moveToNext()) {
+		// System.out.println(cursor.getString(1));
+		// }
+		// cursor.close();
+		// }
 	}
 
 	private void initView(View view) {
