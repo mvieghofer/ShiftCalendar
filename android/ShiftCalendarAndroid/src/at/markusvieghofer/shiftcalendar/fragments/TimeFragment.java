@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
@@ -19,12 +20,6 @@ public class TimeFragment extends DialogFragment implements
 
 	public TimeFragment() {
 
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -45,8 +40,20 @@ public class TimeFragment extends DialogFragment implements
 			timeChangeListener = (TimeChangeListener) arguments
 					.getSerializable(TIME_CHANGE_LISTENER);
 		}
-		return new TimePickerDialog(getActivity(), this, hour, minute,
-				DateFormat.is24HourFormat(getActivity()));
+		TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+				this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+		timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+				getString(android.R.string.cancel),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (timeChangeListener != null) {
+							timeChangeListener.cancelTimeChange();
+						}
+					}
+				});
+		return timePickerDialog;
 	}
 
 	@Override

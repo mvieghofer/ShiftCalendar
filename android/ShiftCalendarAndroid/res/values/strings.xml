@@ -16,5 +16,9 @@
     <string name="login_desc">Please select the account you want to login to</string>
     <string name="previous_month">&lt; Previous Month</string>
     <string name="next_month">Next Month &gt;</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string> 
+    <string name="no_date_entered">No date entered!</string>
+    <string name="no_type_entered">No type entered!</string>
 
 </resources>
