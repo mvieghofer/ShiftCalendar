@@ -29,8 +29,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter implements
     private List<Fragment> fragments = new ArrayList<Fragment>();
     private List<Integer> pageTitles = new ArrayList<Integer>();
     private Context context;
-    private User user;
-    private GoogleCalendar calendar;
     private TypeFragment typeFragment;
     private CalendarSelectionFragment calendarSelectionFragment;
     private DateSelectionFragment dateSelectionFragment;
