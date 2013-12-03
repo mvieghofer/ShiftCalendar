@@ -20,10 +20,11 @@
     <string name="cancel">Cancel</string>
     <string name="no_date_entered">No date entered!</string>
     <string name="no_type_entered">No type entered!</string>
-    <string name="remove_type">Do you really want to remove the type %1?</string>
+    <string name="remove_type">Remove Type</string>
     <string name="accept">Accept</string>
     <string name="error">Error</string>
     <string name="error_applying_dates">Error applying dates. Please select a shift type, a calendar and dates.</string>
     <string name="events_added">All events were added</string>
+    <string name="edit_type">Edit Type</string>
 
 </resources>

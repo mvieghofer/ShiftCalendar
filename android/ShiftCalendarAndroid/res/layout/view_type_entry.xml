@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <CheckedTextView
+        android:id="@+id/rbType"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dip"
+        android:paddingRight="6dip"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/contType"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btnDeleteType"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/remove_type" />
+
+        <Button
+            android:id="@+id/btnEditType"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/edit_type" />
+    </LinearLayout>
+
+</LinearLayout>

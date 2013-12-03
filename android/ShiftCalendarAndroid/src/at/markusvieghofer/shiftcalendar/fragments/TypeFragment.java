@@ -124,8 +124,7 @@ public class TypeFragment extends ListFragment implements TypeListener {
                 frag.show(getActivity().getSupportFragmentManager(), TAG);
             }
         });
-        setTypeAdapter(new TypeAdapter(getActivity(),
-                android.R.layout.simple_list_item_single_choice, readAllTypes()));
+        setTypeAdapter(new TypeAdapter(getActivity(), readAllTypes(), this));
         setListAdapter(getTypeAdapter());
     }
 
