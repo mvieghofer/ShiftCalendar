@@ -3,6 +3,7 @@ package at.markusvieghofer.shiftcalendar.fragments;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -68,6 +69,7 @@ public class AddTypeFragment extends DialogFragment implements
         }
     };
     private TypeListener parent;
+    private Type type;
 
     public AddTypeFragment() {
     }
@@ -83,6 +85,11 @@ public class AddTypeFragment extends DialogFragment implements
         Serializable parentSer = arguments.getSerializable(TypeFragment.KEY);
         if (parentSer instanceof TypeListener) {
             parent = (TypeListener) parentSer;
+        }
+
+        Serializable typeSer = arguments.getSerializable(Type.KEY);
+        if (typeSer != null && typeSer instanceof Type) {
+            type = (Type) typeSer;
         }
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_add_type, null);
@@ -178,6 +185,14 @@ public class AddTypeFragment extends DialogFragment implements
                 }
             }
         });
+
+        if (type != null) {
+            DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT,
+                    Locale.getDefault());
+            txtTypeName.setText(type.getName());
+            txtFrom.setText(format.format(type.getFrom().getTime()));
+            txtTo.setText(format.format(type.getTo().getTime()));
+        }
     }
 
     private void openTimePicker(Calendar cal, EditText editText, String type) {

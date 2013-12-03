@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import at.markusvieghofer.shiftcalendar.R;
 import at.markusvieghofer.shiftcalendar.activities.MainActivity;
@@ -56,30 +53,6 @@ public class TypeFragment extends ListFragment implements TypeListener {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        getListView().setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                setType(typeAdapter.getItem(position));
-            }
-        });
-
-        getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                Type type = typeAdapter.getItem(position);
-                openDeleteTypeDialog(type);
-                return true;
-            }
-        });
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void removeType(Type type) {
         TypeDAO typeDAO = new TypeDAO(getActivity());
         typeDAO.delete(type);
@@ -99,15 +72,6 @@ public class TypeFragment extends ListFragment implements TypeListener {
         this.typeAdapter = typeAdapter;
     }
 
-    protected void openDeleteTypeDialog(Type type) {
-        RemoveTypeFragment removeTypeFrag = new RemoveTypeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Type.KEY, type);
-        bundle.putSerializable(getKey(), this);
-        removeTypeFrag.setArguments(bundle);
-        removeTypeFrag.show(getFragmentManager(), RemoveTypeFragment.TAG);
-    }
-
     private void initView(View rootView) {
 
         final Button btnAddShiftType = (Button) rootView
@@ -124,7 +88,8 @@ public class TypeFragment extends ListFragment implements TypeListener {
                 frag.show(getActivity().getSupportFragmentManager(), TAG);
             }
         });
-        setTypeAdapter(new TypeAdapter(getActivity(), readAllTypes(), this));
+        setTypeAdapter(new TypeAdapter(getActivity(), readAllTypes(), this,
+                getFragmentManager()));
         setListAdapter(getTypeAdapter());
     }
 

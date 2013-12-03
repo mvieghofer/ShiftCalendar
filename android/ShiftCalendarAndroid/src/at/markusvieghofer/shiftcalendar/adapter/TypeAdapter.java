@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,10 +23,13 @@ public class TypeAdapter extends ArrayAdapter<Type> implements TypeListener,
 
     private Map<Long, TypeEntryView> views = new HashMap<Long, TypeEntryView>();
 
+    private FragmentManager fragmentManager;
+
     public TypeAdapter(Context context, List<Type> types,
-            TypeListener typeListener) {
+            TypeListener typeListener, FragmentManager fragmentManager) {
         super(context, R.layout.view_type_entry, types);
         this.typeListener = typeListener;
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -51,6 +55,7 @@ public class TypeAdapter extends ArrayAdapter<Type> implements TypeListener,
         }
         view.setTypeListener(this);
         view.setTypeEditListener(this);
+        view.setFragmentManager(fragmentManager);
         views.put(type.getId(), view);
         return view;
     }
