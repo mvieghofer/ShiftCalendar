@@ -33,6 +33,7 @@
             android:name="at.markusvieghofer.shiftcalendar.activities.MainActivity"
             android:label="@string/app_name" >
         </activity>
+
     </application>
 
 </manifest>

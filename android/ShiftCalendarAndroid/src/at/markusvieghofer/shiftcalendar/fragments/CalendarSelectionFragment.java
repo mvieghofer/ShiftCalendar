@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import at.markusvieghofer.shiftcalendar.adapter.CalendarAdapter;
 import at.markusvieghofer.shiftcalendar.fragments.api.CalendarSelectionListener;
 import at.markusvieghofer.shiftcalendar.models.GoogleCalendar;
 import at.markusvieghofer.shiftcalendar.models.User;
@@ -58,6 +60,10 @@ public class CalendarSelectionFragment extends ListFragment {
                     int position, long id) {
                 GoogleCalendar calendar = arrayAdapter.getItem(position);
                 FragmentActivity activity = getActivity();
+                if (view instanceof RadioButton) {
+                    RadioButton radioButton = (RadioButton) view;
+                    radioButton.toggle();
+                }
                 if (activity instanceof CalendarSelectionListener) {
                     CalendarSelectionListener listener = (CalendarSelectionListener) activity;
                     listener.updateCalendar(calendar);
@@ -94,8 +100,8 @@ public class CalendarSelectionFragment extends ListFragment {
             calendars.add(calendar);
         }
         cursor.close();
-        arrayAdapter = new ArrayAdapter<GoogleCalendar>(getActivity(),
-                android.R.layout.simple_list_item_single_choice, calendars);
+        arrayAdapter = new CalendarAdapter(getActivity(), calendars,
+                (CalendarSelectionListener) getActivity());
         setListAdapter(arrayAdapter);
     }
 }

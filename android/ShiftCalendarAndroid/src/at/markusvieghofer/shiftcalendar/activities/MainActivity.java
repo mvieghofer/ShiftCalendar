@@ -163,7 +163,7 @@ public class MainActivity extends FragmentActivity implements
                 values.put(Events.TITLE, type.getName());
                 values.put(Events.DTSTART, buildStartDate(date));
                 values.put(Events.DTEND, buildEndDate(date));
-                values.put(Events.ALL_DAY, false);
+                values.put(Events.ALL_DAY, 0);
                 values.put(Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
                 contentResolver.insert(Events.CONTENT_URI, values);
             }
@@ -187,11 +187,7 @@ public class MainActivity extends FragmentActivity implements
         if (type.getFrom().after(type.getTo())) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
-
-        long diff = type.getTo().getTime().getTime()
-                - type.getFrom().getTime().getTime();
-        return diff;
-
+        return calendar.getTimeInMillis();
     }
 
     private long buildStartDate(Date date) {

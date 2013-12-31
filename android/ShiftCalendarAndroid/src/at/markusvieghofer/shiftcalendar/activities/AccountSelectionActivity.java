@@ -16,7 +16,7 @@ import at.markusvieghofer.shiftcalendar.db.daos.UserDAO;
 import at.markusvieghofer.shiftcalendar.models.User;
 import at.markusvieghofer.shiftcalendar.models.api.Model;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.*;
 
 public class AccountSelectionActivity extends ListActivity {
 
